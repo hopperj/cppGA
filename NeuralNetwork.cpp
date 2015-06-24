@@ -4,6 +4,7 @@
 #include <math.h>
 #include <vector>
 #include <fstream>
+#include <cstdlib>
 
 #ifndef NEURALNETWORK_H
 #include "NeuralNetwork.h"
@@ -19,7 +20,8 @@ void NeuralNetwork::Init( int ins, int hidd, int outs ){
   numOfOutputs = outs;
 
   energyThreshold = 0.9;
-
+  useThreshold = 0;
+  
   randomIHW();
   randomHOW();
 }
@@ -66,12 +68,18 @@ int NeuralNetwork::load(){
 
 void NeuralNetwork::randomIHW(){
   
-  ihw = vector< vector<float> >(numOfInputs);
+  ihw = vector< vector<double> >(numOfInputs);
   for( int i=0; i<numOfInputs; i++){
-    vector<float> v(numOfHidden,1.5);
+    vector<double> v(numOfHidden,0.0);
+    for( int j=0; j<numOfHidden; j++ ){
+      // Generate number [-0.5, 0.5)
+      v[j] = rand()/float(RAND_MAX) - 0.5;
+    }
+    //cout << "made element: " << i << endl;
     ihw[i] = v;
+    
   }
-
+  //cout << "complete" << endl;
 }
 
 void NeuralNetwork::printIHW(){
@@ -87,20 +95,25 @@ void NeuralNetwork::printIHW(){
   }
 }
 
-vector< vector<float> > NeuralNetwork::getIHW(){
+vector< vector<double> > NeuralNetwork::getIHW(){
   return ihw;
 }
 
 void NeuralNetwork::randomHOW(){
-  how = vector< vector<float> >(numOfHidden);
+  how = vector< vector<double> >(numOfHidden);
   for( int i=0; i<numOfHidden; i++){
-    vector<float> v(numOfOutputs,2.5);
+    vector<double> v(numOfOutputs,0.0);
+    for( int j=0; j<numOfOutputs; j++ ){
+      // Generate number [-0.5, 0.5)
+      v[j] = rand()/float(RAND_MAX) - 0.5;
+    }
+    //cout << "doing element: " << i << " of " << numOfHidden << endl;
     how[i] = v;
   }
-
+  //cout << "complete" << endl;
 }
 
-vector< vector<float> > NeuralNetwork::getHOW(){
+vector< vector<double> > NeuralNetwork::getHOW(){
   return how;
 }
 
@@ -119,30 +132,30 @@ void NeuralNetwork::printHOW(){
 
 void NeuralNetwork::resetNodes(){
   
-  inputs = vector<float>(numOfInputs);
+  inputs = vector<double>(numOfInputs);
   // Set the bias node
   inputs[numOfInputs-1] = 1.0;
-  hidden = vector<float>(numOfHidden);
-  outputs = vector<float>(numOfOutputs);
+  hidden = vector<double>(numOfHidden);
+  outputs = vector<double>(numOfOutputs);
 
 }
 
-float NeuralNetwork::sigmoid(float x){
+double NeuralNetwork::sigmoid(double x){
   return 1.0/(1.0+exp(-1.0*x));
 }
 
-float NeuralNetwork::dsigmoid(float x){
+double NeuralNetwork::dsigmoid(double x){
   return x*( 1.0 - x );
 }
 
  
-vector< float > NeuralNetwork::run( vector< float > inpt){
+vector< double > NeuralNetwork::run( vector< double > inpt){
   resetNodes();
   for( int i=0; i<inpt.size(); i++ ){
     inputs[i] = inpt[i];
   }
   
-  vector< float > result = feedForward();
+  vector< double > result = feedForward();
   if (useThreshold == 1){
     return result;
   } else {
@@ -150,7 +163,7 @@ vector< float > NeuralNetwork::run( vector< float > inpt){
   }
 }
 
-vector<float> NeuralNetwork::feedForward(){
+vector<double> NeuralNetwork::feedForward(){
   for( int i=0; i<numOfInputs; i++){
     for( int h=0; h<numOfHidden; h++){
       hidden[h] += inputs[i]*ihw[i][h];
@@ -168,7 +181,7 @@ vector<float> NeuralNetwork::feedForward(){
     }
   }
   
-  vector<float> threshOuts(numOfOutputs, 0.0);
+  vector<double> threshOuts(numOfOutputs, 0.0);
   
   for( int o=0; o<numOfOutputs; o++ ){
     outputs[o] = sigmoid( outputs[o] );
@@ -183,7 +196,7 @@ vector<float> NeuralNetwork::feedForward(){
 void NeuralNetwork::customIHW(){
 
   for( int i=0; i<numOfInputs; i++ ){
-    vector<float> v {0.0,1.0,2.0};
+    vector<double> v {0.0,1.0,2.0};
     ihw[i] = v;
   }
   
@@ -195,7 +208,7 @@ void NeuralNetwork::customIHW(){
 void NeuralNetwork::customHOW(){
 
   for( int i=0; i<numOfHidden; i++ ){
-    vector<float> v {0.0,1.0,2.0};
+    vector<double> v {0.0,1.0,2.0};
     how[i] = v;
   }
 
@@ -206,7 +219,7 @@ void NeuralNetwork::customHOW(){
 
 }
 
-void print1DVector( vector<float> x){
+void print1DVector( vector<double> x){
   //cout << "vector size=" << x.size() << endl;
   for( int i=0; i<x.size(); i++){
     cout << x[i];
@@ -217,7 +230,7 @@ void print1DVector( vector<float> x){
   cout << endl;
 }
 
-void print2DVector( vector< vector<float> > x){
+void print2DVector( vector< vector<double> > x){
   //cout << "printing 2D vector" << endl;
   for( int i=0; i<x.size(); i++){
     for( int j=0; j<x[i].size(); j++) {
@@ -241,17 +254,17 @@ int main(){
   nn.customIHW();
   nn.customHOW();
 
-  vector< vector<float>> xorstate;
+  vector< vector<double>> xorstate;
   xorstate.push_back( {0,1} );
   xorstate.push_back ({1,1} );
   xorstate.push_back( {1,0} );
   xorstate.push_back( {0,0} );
 
   
-  vector<float> expect {1,0,1,0};
+  vector<double> expect {1,0,1,0};
 
   for( int i=0; i<xorstate.size(); i++){   
-    vector<float> tmp = nn.run( xorstate[i] );
+    vector<double> tmp = nn.run( xorstate[i] );
     cout << "\nInput:" << endl;
     print1DVector(xorstate[i]);
     cout << "Result:"; 

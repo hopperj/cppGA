@@ -14,23 +14,23 @@ class NeuralNetwork
 {
 public:
   int numOfInputs, numOfHidden, numOfOutputs;
-  vector<float> inputs;
-  vector<float> hidden;
-  vector<float> outputs;
+  vector<double> inputs;
+  vector<double> hidden;
+  vector<double> outputs;
 
-  vector< vector<float> > ihw;
-  vector< vector<float> > how;
+  vector< vector<double> > ihw;
+  vector< vector<double> > how;
 
   int useThreshold;
-  float energyThreshold;
+  double energyThreshold;
 
   void Init( int ins, int hidd, int outs );
 
-  int setIHW( vector< vector<float> > nihw );
-  int setHOW( vector< vector<float> > nhow );
+  int setIHW( vector< vector<double> > nihw );
+  int setHOW( vector< vector<double> > nhow );
 
-  vector< vector<float> > getIHW();
-  vector< vector<float> > getHOW();
+  vector< vector<double> > getIHW();
+  vector< vector<double> > getHOW();
 
 
   void customIHW();
@@ -42,16 +42,16 @@ public:
   int save();
   int load();
   
-  vector< float > run( vector< float> inpt );
+  vector< double > run( vector< double> inpt );
   
 private:
-  float sigmoid(float x);
-  float dsigmoid(float x);
+  double sigmoid(double x);
+  double dsigmoid(double x);
 
   void randomIHW();
   void randomHOW();
 
   void resetNodes();
 
-  vector< float > feedForward();
+  vector< double > feedForward();
 };

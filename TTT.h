@@ -5,6 +5,12 @@
 #include <vector>
 #include <fstream>
 
+
+#ifndef TTT_H
+#define TTT_H
+#endif
+
+
 using namespace std;
 
 #define N 3
@@ -20,7 +26,7 @@ public:
   TTT();
 
   void clearBoard();
-
+  vector<double> getBoardLinear();
   int unitTest();
   
   int isValidMove(int x, int y);

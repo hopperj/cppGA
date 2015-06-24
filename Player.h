@@ -6,13 +6,21 @@
 #include "NeuralNetwork.h"
 #endif
 
+#ifndef TTT_H
+#include "TTT.h"
+#endif
 
-class NeuralNetwork;
 
 class Player
 {
 
 public:
+
+  char mark;
+  vector<double> moves;
+  
   NeuralNetwork brain;
-  Player();
+  Player(char _mark);
+
+  void TakeTurn( TTT game );
 };

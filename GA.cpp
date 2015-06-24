@@ -18,8 +18,14 @@ GA::GA(){
 
 int main(){
   TTT game = TTT();
-  Player p1 = Player();
-  Player p2 = Player();
+  Player p1 = Player('x');
+  Player p2 = Player('o');
+
+
+  //p1.brain.printIHW();
+  
+  p1.TakeTurn( game );
+
   
   cout << "Cleaning up" << endl;
 

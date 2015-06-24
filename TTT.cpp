@@ -48,6 +48,18 @@ int TTT::move(int x, int y, int playerNum ){
   return 1;
 }
 
+vector<double> TTT::getBoardLinear(){
+  vector<double> line = vector<double>(N*M,0.0);
+
+  for( int i=0; i<N; i++){
+    for( int j=0; j<M; j++ ){
+      line[i+j] = board[i][j];
+    }
+  }
+
+  return line;
+}
+
 int TTT::checkWinner(){
 
   int sum=0;
