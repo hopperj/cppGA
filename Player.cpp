@@ -1,4 +1,5 @@
 #include "Player.h"
+#include <algorithm>
 
 #ifndef TTT_H
 #include "TTT.h"
@@ -12,7 +13,11 @@ Player::Player( char _mark ){
 
 void Player::TakeTurn( TTT game ){
   moves = brain.run( game.getBoardLinear() );
-  for( int i = 0; i<moves.size(); i++ ){
-    cout << moves[i] << endl;
+  vector<double> sorted = moves;
+
+  sort( sorted.begin(), sorted.end() );
+  cout << "Max: " << *max_element( sorted.begin(), sorted.end() ) << endl;
+  for( int i = 0; i<sorted.size(); i++ ){
+    cout << sorted[i] << endl;
   }
 }

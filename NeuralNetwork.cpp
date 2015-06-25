@@ -51,9 +51,6 @@ int NeuralNetwork::save() {
       }
       fout << endl;
     }    
-
-
-    
   }
 
   return 0;
@@ -137,7 +134,6 @@ void NeuralNetwork::resetNodes(){
   inputs[numOfInputs-1] = 1.0;
   hidden = vector<double>(numOfHidden);
   outputs = vector<double>(numOfOutputs);
-
 }
 
 double NeuralNetwork::sigmoid(double x){
