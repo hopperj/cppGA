@@ -4,7 +4,7 @@
 #include<math.h>
 #include <vector>
 #include <fstream>
-
+#include <map>
 
 #ifndef TTT_H
 #define TTT_H
@@ -21,17 +21,18 @@ class TTT
 
 public:
   int board[N][M];
-  vector<int> playerValues {-1, 1};
-  vector<char> playerTolkens {'x', 'o'};
+  //vector<int> playerValues {-1, 1};
+  //vector<char> playerTolkens {'x', 'o'};
+  map<char, int> playerMap;
   TTT();
 
   void clearBoard();
   vector<double> getBoardLinear();
   int unitTest();
-  
+
   int isValidMove(int x, int y);
   void printBoard();
-  int move(int x, int y, int playerNum );
+  int move(int x, int y, char playerNum );
   int checkWinner();
-};
 
+};

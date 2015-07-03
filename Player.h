@@ -18,9 +18,12 @@ public:
 
   char mark;
   vector<double> moves;
-  
+
   NeuralNetwork brain;
   Player(char _mark);
+  Player();
 
-  void TakeTurn( TTT game );
+  int TakeTurn( TTT *game );
+  int indexOf( vector<double>& v, double element );
+  void SetMark( char _mark );
 };

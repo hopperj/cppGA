@@ -12,9 +12,11 @@ using namespace std;
 
 TTT::TTT(){
   clearBoard();
+  playerMap = { {'x',-1}, {'o',1} };
 }
 
 void TTT::clearBoard(){
+
   for( int i=0; i<N; i++ ) {
     for( int j=0; j<M; j++ ) {
       board[i][j] = 0;
@@ -32,19 +34,27 @@ void TTT::printBoard(){
     for( int j=0; j<M; j++ ) {
       cout << board[i][j] << " ";
       if( j<M-1){
-	cout << "| ";
+	       cout << "| ";
       }
     }
-    cout << "\n\t---------" << endl;
+    if( i<N-1){
+      cout << "\n\t---------" << endl;
+    }
+
   }
   cout << "\n\n\n" << endl;
 }
 
-int TTT::move(int x, int y, int playerNum ){
+int TTT::move(int x, int y, char playerToken ){
   if( isValidMove(x,y) ){
-    board[x][y] = playerValues[ playerNum ];
+    //board[x][y] = playerValues[ playerNum ];
+    //cout << "Using player token: " << playerToken << endl;
+    board[x][y] = playerMap[ playerToken ];
+    //printBoard();
+    //cout << "p" << playerMap[ playerToken ] << endl;
+    //cout << x << " " << y << " set by " << playerNum << endl;
     return 0;
-  }  
+  }
   return 1;
 }
 
@@ -65,7 +75,7 @@ int TTT::checkWinner(){
   int sum=0;
 
   // Check Rows
-  for( int i=0; i<N; i++ ){    
+  for( int i=0; i<N; i++ ){
     for( int j=0; j<M; j++ ){
       sum += board[i][j];
     }
@@ -76,7 +86,7 @@ int TTT::checkWinner(){
   }
 
   // Check Columns
-  for( int j=0; j<M; j++ ){    
+  for( int j=0; j<M; j++ ){
     for( int i=0; i<N; i++ ){
       sum += board[i][j];
     }
@@ -86,7 +96,7 @@ int TTT::checkWinner(){
     sum = 0;
   }
 
-  // Check Diagonal  
+  // Check Diagonal
   for( int j=0; j<M; j++ ){
       sum += board[j][j];
   }
@@ -94,7 +104,7 @@ int TTT::checkWinner(){
     return 1;
   }
   sum = 0;
-  
+
 
   // Check Other Diagonal
   for( int i=0; i<N; i++ ){
@@ -105,7 +115,7 @@ int TTT::checkWinner(){
   }
   sum = 0;
 
-  
+
   return 0;
 }
 
@@ -117,8 +127,8 @@ int TTT::unitTest(){
   move(0,0,0);
   move(1,1,0);
   move(2,2,0);
-  
-  cout << "Winning? " << checkWinner() << endl;  
+
+  cout << "Winning? " << checkWinner() << endl;
   printBoard();
   clearBoard();
 
@@ -128,8 +138,8 @@ int TTT::unitTest(){
   move(0,2,0);
   move(1,1,0);
   move(2,0,0);
-  
-  cout << "Winning? " << checkWinner() << endl;  
+
+  cout << "Winning? " << checkWinner() << endl;
   printBoard();
   clearBoard();
 
@@ -139,8 +149,8 @@ int TTT::unitTest(){
   move(0,2,1);
   move(1,2,1);
   move(2,2,1);
-  
-  cout << "Winning? " << checkWinner() << endl;  
+
+  cout << "Winning? " << checkWinner() << endl;
   printBoard();
   clearBoard();
 
@@ -150,8 +160,8 @@ int TTT::unitTest(){
   move(0,1,1);
   move(1,1,1);
   move(2,1,1);
-  
-  cout << "Winning? " << checkWinner() << endl;  
+
+  cout << "Winning? " << checkWinner() << endl;
   printBoard();
   clearBoard();
 
@@ -161,8 +171,8 @@ int TTT::unitTest(){
   move(0,1,1);
   move(1,1,0);
   move(2,1,1);
-  
-  cout << "Winning? " << checkWinner() << endl;  
+
+  cout << "Winning? " << checkWinner() << endl;
   printBoard();
   clearBoard();
 
@@ -170,5 +180,3 @@ int TTT::unitTest(){
   return 0;
 
 }
-
-  
