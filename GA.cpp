@@ -33,33 +33,55 @@ void GA::RunSimulation(){
   cout << "Beginning game" << endl;
   //PlayGame( &p1, &p2);
 
-  p1.SetMark('x');
-  p2.SetMark('o');
+  double results[2] = {0.0,0.0};
 
   TTT game = TTT();
-  for( int i=0; i<9; i++ ){
-      if( turnNum % 2){
-        if( p1.TakeTurn( &game ) ){
-          cout << "Player 1 wins!" << endl;
-          break;
-        }
+  for( int p1Num=0; p1Num<numOfPlayers-1; p1Num++){
+    for( int p2Num=p1Num+1; p2Num<numOfPlayers; p2Num++){
+      p1 = population[p1Num];
+      p2 = population[p2Num];
+      //p1 = Player();
+      //p2 = Player();
 
-      } else {
-        if( p2.TakeTurn( &game ) ){
-          cout << "Player 2 wins!" << endl;
-          break;
-        }
+      p1.SetMark('x');
+      p2.SetMark('o');
+
+
+
+
+      for( int turnNum=0; turnNum<9; turnNum++ ){
+          if( turnNum % 2){
+            if( p1.TakeTurn( &game ) ){
+              //cout << "Player 1 wins!" << endl;
+              results[0] += 1.0;
+              break;
+            }
+
+          } else {
+            if( p2.TakeTurn( &game ) ){
+              //cout << "Player 2 wins!" << endl;
+              results[1] += 1.0;
+              break;
+            }
+          }
+          //cout << "Turn: " << turnNum << endl;
       }
-      //cout << "Turn: " << turnNum << endl;
-      turnNum++;
+      //game.printBoard();
+      game.clearBoard();
+    }
+    if( p1Num%10==0){
+      cout << float(p1Num)/float(numOfPlayers) << endl;
+    }
   }
-  game.printBoard();
 
 
-
+  cout <<"Player 1: " << results[0] << endl;
+  cout << "Player 2: " << results[1] << endl;
+  cout << "Ratio: " << (float)results[0]/(float)results[1] << endl;
 }
 
 void GA::PlayGame( Player *p1, Player *p2 ){
+  /*
   TTT game = TTT();
   for( int i=0; i<9; i++ ){
       if( turnNum % 2){
@@ -78,7 +100,7 @@ void GA::PlayGame( Player *p1, Player *p2 ){
       turnNum++;
   }
   game.printBoard();
-
+  */
 }
 
 

@@ -35,7 +35,6 @@ public:
   void PlayGame( Player *p1, Player *p2);
   void RunSimulation();
 
-  int turnNum = 0;
   int numOfPlayers = 1000;
   vector<Player> population;
   vector< vector<double> > scores;
