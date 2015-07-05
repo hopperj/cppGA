@@ -5,8 +5,10 @@
 #include <vector>
 #include <fstream>
 #include <vector>
-
+#include <algorithm>
 #include "GA.h"
+
+using namespace std;
 
 GA::GA(){
 
@@ -42,7 +44,6 @@ int GA::indexOf( vector<double>& v, double element ) {
 }
 
 void GA::SortPopulation(){
-  Player test[5];
   fitness = vector< double >(NUMOFPLAYERS, -99.0);
   sortedFitness = vector< double >(NUMOFPLAYERS, -99.0);
   newPopulation = vector< Player >(NUMOFPLAYERS);
@@ -99,7 +100,7 @@ void GA::Breed(){
 }
 
 void GA::RunSimulation(){
-  int numOfGenerations = 50;
+  //int numOfGenerations = 50;
 
   for( int generation=0; generation<numOfGenerations; generation++){
     cout << "Generation: " << generation << endl;

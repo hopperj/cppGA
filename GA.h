@@ -40,9 +40,10 @@ public:
   void SortPopulation();
   void Breed();
 
-  int NUMOFPLAYERS = 500;
+  int NUMOFPLAYERS = 100;
+  int numOfGenerations = 100;
   double breedFraction = 0.4;
-  double killFraction = 0.4;
+  double killFraction = 0.6;
 
   //Player population[ NUMOFPLAYERS ];
   vector<Player> population;
