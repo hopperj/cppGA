@@ -22,6 +22,7 @@
 #include "Player.h"
 #endif
 
+//#define NUMOFPLAYERS 100
 
 using namespace std;
 
@@ -32,10 +33,25 @@ class GA
 public:
 
   GA();
-  void PlayGame( Player *p1, Player *p2);
+  void PlayGame(int p1Num, int p2Num, TTT *game);
+  void PlayTournament();
   void RunSimulation();
+  int indexOf( vector<double>& v, double element );
+  void SortPopulation();
+  void Breed();
 
-  int numOfPlayers = 1000;
+  int NUMOFPLAYERS = 500;
+  double breedFraction = 0.4;
+  double killFraction = 0.4;
+
+  //Player population[ NUMOFPLAYERS ];
   vector<Player> population;
   vector< vector<double> > scores;
+
+
+  vector< double > fitness;
+  vector< double > sortedFitness;
+  vector< Player > newPopulation;
+  //Player newPopulation[ NUMOFPLAYERS ];
+
 };

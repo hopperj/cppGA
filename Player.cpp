@@ -8,16 +8,52 @@
 
 
 Player::Player( char _mark ){
-  brain.Init(18,36,9);
+  brain.Init(18,18,3,9);
   mark = _mark;
+
+  wins = 0.0;
+  ties = 0.0;
+  losses = 0.0;
 }
 
 Player::Player(){
-  brain.Init(18,36,9);
+  /*
+  brain.Init(2,3,2,1);
+  cout << "IHW" << endl;
+  brain.PrintIHW();
+  cout << endl;
+  cout << "HHW" << endl;
+  brain.PrintHHW();
+  cout << endl;
+  cout << "HOW" << endl;
+  brain.PrintHOW();
+  */
+  brain.Init(18,18,5,9);
+
+  wins = 0.0;
+  ties = 0.0;
+  losses = 0.0;
 }
 
 void Player::SetMark( char _mark ){
   mark = _mark;
+}
+
+void Player::ClearScore(){
+  wins = 0.0;
+  ties = 0.0;
+  losses = 0.0;
+}
+
+double Player::Fitness(){
+  if(wins+ties+losses == 0.0 ){
+    return 0.0;
+  }
+  return (5.0*wins + 2.0*ties - 10.0*losses)/(float)(wins+ties+losses);
+}
+
+double Player::MaxFitness(){
+  return 5.0;
 }
 
 int Player::TakeTurn( TTT *game ){

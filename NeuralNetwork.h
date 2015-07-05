@@ -13,18 +13,19 @@ using namespace std;
 class NeuralNetwork
 {
 public:
-  int numOfInputs, numOfHidden, numOfOutputs;
+  int numOfInputs, numOfHidden, numOfOutputs, numOfHiddenLayers;
   vector<double> inputs;
-  vector<double> hidden;
+  vector< vector<double> > hidden;
   vector<double> outputs;
 
   vector< vector<double> > ihw;
+  vector< vector< vector<double> > > hhw;
   vector< vector<double> > how;
 
   int useThreshold;
   double energyThreshold;
 
-  void Init( int ins, int hidd, int outs );
+  void Init( int ins, int hidd, int nohl, int outs );
 
   int setIHW( vector< vector<double> > nihw );
   int setHOW( vector< vector<double> > nhow );
@@ -36,22 +37,30 @@ public:
   void customIHW();
   void customHOW();
 
-  void printIHW();
-  void printHOW();
+  void PrintIHW();
+  void PrintHOW();
+  void PrintHHW();
+
+  void PertibateBrain();
 
   int save();
   int load();
-  
+
   vector< double > run( vector< double> inpt );
-  
+
 private:
   double sigmoid(double x);
   double dsigmoid(double x);
 
-  void randomIHW();
-  void randomHOW();
+  vector< vector<double> > Random2DList( int n, int m);
+
+  void RandomIHW();
+  void RandomHOW();
+  void RandomHHW();
 
   void resetNodes();
+
+  void print2DVector( vector< vector<double> > a2d);
 
   vector< double > feedForward();
 };

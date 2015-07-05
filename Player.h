@@ -17,6 +17,7 @@ class Player
 public:
 
   char mark;
+  double wins, ties, losses;
   vector<double> moves;
 
   NeuralNetwork brain;
@@ -26,4 +27,7 @@ public:
   int TakeTurn( TTT *game );
   int indexOf( vector<double>& v, double element );
   void SetMark( char _mark );
+  double Fitness();
+  double MaxFitness();
+  void ClearScore();
 };
