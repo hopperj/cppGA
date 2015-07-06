@@ -41,8 +41,8 @@ public:
   void Breed();
   void GenPopulation();
 
-  int NUMOFPLAYERS = 100;
-  int numOfGenerations = 75;
+  int NUMOFPLAYERS = 1000;
+  int numOfGenerations = 500;
   double breedFraction = 0.5;
   double killFraction = 0.4;
   bool perfectScore = false;
