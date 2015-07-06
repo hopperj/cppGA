@@ -73,21 +73,37 @@ void NeuralNetwork::PertibateBrain(){
 
   for( int i=0; i<numOfInputs; i++ ){
     for( int h=0; h<numOfHidden; h++ ){
-      ihw[i][h] += 0.1*(rand()/float(RAND_MAX) - 0.5);
+      if( rand()/float(RAND_MAX) >= mutationChance ){
+        ihw[i][h] += 0.1*(rand()/float(RAND_MAX) - 0.5);
+      }
+      else{
+        ihw[i][h] = rand()/float(RAND_MAX) - 0.5;
+      }
+
     }
   }
 
   for( int hl=0; hl<numOfHiddenLayers; hl++){
     for( int h1=0; h1<numOfHidden; h1++){
       for( int h2=0; h2<numOfHidden; h2++){
-        hhw[hl][h1][h2] += 0.1*(rand()/float(RAND_MAX) - 0.5);
+        if( rand()/float(RAND_MAX) >= mutationChance ){
+          hhw[hl][h1][h2] += 0.1*(rand()/float(RAND_MAX) - 0.5);
+        }
+        else {
+          hhw[hl][h1][h2] = rand()/float(RAND_MAX);
+        }
       }
     }
   }
 
   for( int h=0; h<numOfHidden; h++ ){
     for( int o=0; o<numOfOutputs; o++ ){
-      how[h][o] += 0.1*(rand()/float(RAND_MAX) - 0.5);
+      if( rand()/float(RAND_MAX) >= mutationChance ){
+        how[h][o] += 0.1*(rand()/float(RAND_MAX) - 0.5);
+      }
+      else {
+        how[h][o] = rand()/float(RAND_MAX);
+      }
     }
   }
 

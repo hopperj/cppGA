@@ -16,17 +16,7 @@ GA::GA(){
 
   population = vector<Player>(NUMOFPLAYERS);
   scores = vector< vector<double> >(NUMOFPLAYERS);
-
-  cout << "\n\nGenerating " << NUMOFPLAYERS << " Players\n\n" << endl;
-  for( int i=0; i<NUMOFPLAYERS; i++){
-    //cout << "Making player number: " << i << endl;
-    population[i] = Player();
-    population[i].wins = 0.0;
-    population[i].ties = 0.0;
-    population[i].losses = 0.0;
-  }
-  //cout << "Done generating players" << endl;
-
+  GenPopulation();
 }
 
 int GA::indexOf( vector<double>& v, double element ) {
@@ -57,12 +47,9 @@ void GA::SortPopulation(){
 
   for( int i=0; i<NUMOFPLAYERS; i++){
     newPopulation[i] = population[ indexOf(fitness, sortedFitness[i]) ];
-    //cout << i << " " << newPopulation[i].Fitness() << endl;
   }
 
   reverse( newPopulation.begin(), newPopulation.end() );
-  //reverse( newPopulation[0], newPopulation[ NUMOFPLAYERS-1 ] );
-  //population = newPopulation;
 
   for( int i=0; i<1; i++){
     cout << i << " " << newPopulation[i].Fitness() << endl;
@@ -74,19 +61,19 @@ void GA::Breed(){
   Player newP;
   vector<Player> children = vector<Player>( NUMOFPLAYERS*killFraction );
   int i=0;
-  //cout << "passing on breeders" << endl;
+  perfectScore = false;
+  if( newPopulation[0].Fitness() == 4.0 ){
+    perfectScore = true;
+  }
   while( i<NUMOFPLAYERS*( 1.0 - killFraction ) ){
     population[i] = newPopulation[i];
     population[i].ClearScore();
     i++;
   }
 
-  //cout << "making children" << endl;
   while( i < NUMOFPLAYERS ){
-    //cout << "player bredding num:" << i << endl;
     for( int j=0; j<NUMOFPLAYERS*breedFraction; j++){
       newP = newPopulation[j];
-      //cout << i << " " << j << endl;
       newP.brain.PertibateBrain();
       population[i] = newP;
       population[i].ClearScore();
@@ -96,20 +83,36 @@ void GA::Breed(){
       }
     }
   }
+}
 
+void GA::GenPopulation(){
+  cout << "\n\nGenerating " << NUMOFPLAYERS << " Players\n\n" << endl;
+  for( int i=0; i<NUMOFPLAYERS; i++){
+    population[i] = Player();
+    population[i].wins = 0.0;
+    population[i].ties = 0.0;
+    population[i].losses = 0.0;
+  }
 }
 
 void GA::RunSimulation(){
-  //int numOfGenerations = 50;
-
+  Player allStar;
   for( int generation=0; generation<numOfGenerations; generation++){
     cout << "Generation: " << generation << endl;
     PlayTournament();
     SortPopulation();
     Breed();
-
-
   }
+  population[0].brain.save();
+
+  allStar = population[0];
+  GenPopulation();
+  population[0] = allStar;
+  PlayTournament();
+  cout << "All star fitness: " << population[0].Fitness() << endl;
+  
+
+
 
 }
 
@@ -121,7 +124,13 @@ void GA::PlayTournament(){
   for( int p1Num=0; p1Num<NUMOFPLAYERS-1; p1Num++) {
     for( int p2Num=p1Num+1; p2Num<NUMOFPLAYERS; p2Num++) {
       //cout << "Player " << p1Num << " vs " << p2Num << endl;
+      //if( rand()/float(RAND_MAX) <= 0.5 ){
       PlayGame( p1Num, p2Num, &game );
+      //}
+      //else {
+      PlayGame( p2Num, p1Num, &game );
+      //}
+
       game.clearBoard();
 
     }

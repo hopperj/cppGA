@@ -39,12 +39,13 @@ public:
   int indexOf( vector<double>& v, double element );
   void SortPopulation();
   void Breed();
+  void GenPopulation();
 
   int NUMOFPLAYERS = 100;
-  int numOfGenerations = 100;
-  double breedFraction = 0.4;
-  double killFraction = 0.6;
-
+  int numOfGenerations = 75;
+  double breedFraction = 0.5;
+  double killFraction = 0.4;
+  bool perfectScore = false;
   //Player population[ NUMOFPLAYERS ];
   vector<Player> population;
   vector< vector<double> > scores;

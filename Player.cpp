@@ -49,7 +49,7 @@ double Player::Fitness(){
   if(wins+ties+losses == 0.0 ){
     return 0.0;
   }
-  return (5.0*wins + 2.0*ties - 10.0*losses)/(float)(wins+ties+losses);
+  return (5.0*wins + 4.0*ties - 10.0*losses)/(float)(wins+ties+losses);
 }
 
 double Player::MaxFitness(){
