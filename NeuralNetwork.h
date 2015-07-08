@@ -24,7 +24,8 @@ public:
 
   int useThreshold;
   double energyThreshold;
-  double mutationChance = 0.01;
+  double mutationChance = 0.05;
+  double mutationStrength = 0.05;
 
   void Init( int ins, int hidd, int nohl, int outs );
 

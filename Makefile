@@ -1,7 +1,7 @@
 
 
 CC=g++
-CFLAGS=-c -Wall -std=c++11
+CFLAGS=-c -Wall -std=c++11 -O2
 LDFLAGS=
 SOURCES=NeuralNetwork.cpp TTT.cpp GA.cpp Player.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
@@ -9,7 +9,7 @@ EXECUTABLE=GA
 
 all: $(SOURCES) $(EXECUTABLE)
 
-$(EXECUTABLE): $(OBJECTS) 
+$(EXECUTABLE): $(OBJECTS)
 	$(CC) $(LDFLAGS) $(OBJECTS) -o $@
 
 .cpp.o:

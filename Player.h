@@ -19,13 +19,16 @@ public:
   char mark;
   double wins, ties, losses;
   vector<double> moves;
+  vector<double> sorted;
+
+  int potentialMove;
 
   NeuralNetwork brain;
   Player(char _mark);
   Player();
 
   int TakeTurn( TTT *game );
-  int indexOf( vector<double>& v, double element );
+  inline int indexOf( vector<double>& v, double element );
   void SetMark( char _mark );
   double Fitness();
   double MaxFitness();

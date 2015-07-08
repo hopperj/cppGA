@@ -59,14 +59,23 @@ int TTT::move(int x, int y, char playerToken ){
 }
 
 vector<double> TTT::getBoardLinear(){
-  vector<double> line = vector<double>(N*M,0.0);
+  vector<double> line = vector<double>(2*N*M,0.0);
 
   for( int i=0; i<N; i++){
     for( int j=0; j<M; j++ ){
-      line[i+j] = board[i][j];
+      if( board[i][j] == -1 ){
+        line[2*i+2*j] = board[i][j];
+      } else {
+        line[2*i+2*j+1] = board[i][j];
+      }
+
     }
   }
-
+  /*
+  for( int i=0; i<2*N*M; i++){
+    cout << i << " " << line[i] << endl;
+  }
+  */
   return line;
 }
 
