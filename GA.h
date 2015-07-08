@@ -42,8 +42,8 @@ public:
   void Breed();
   void GenPopulation();
 
-  int NUMOFPLAYERS = 10000;
-  int numOfGenerations = 1000;
+  int NUMOFPLAYERS = 1000;
+  int numOfGenerations = 500;
   int testingPool = 200;
 
   double breedFraction = 0.5;
