@@ -22,8 +22,9 @@
 #include "Player.h"
 #endif
 
-//#define NUMOFPLAYERS 100
-
+#define NUMOFPLAYERS 1000
+#define TESTINGPOOLSIZE 100
+#define NUMOFGENERATIONS 1
 using namespace std;
 
 
@@ -36,18 +37,20 @@ public:
   void PlayGame2(int p1Num, int p2Num, TTT *game);
   void PlayGame(Player *p1, Player *p2, TTT *game);
   void PlayTournament();
+  void PlayTournament(int p1Start, int p1End, int poolStart, int poolEnd);
+  void PlayTournament( vector< int > args );
   void RunSimulation();
   int indexOf( vector<double>& v, double element );
   void SortPopulation();
   void Breed();
   void GenPopulation();
 
-  int NUMOFPLAYERS = 1000;
-  int numOfGenerations = 500;
-  int testingPool = 200;
+  //int NUMOFPLAYERS = 750;
+  //int numOfGenerations = 100;
+  //int testingPool = 50;
 
-  double breedFraction = 0.5;
-  double killFraction = 0.5;
+  double breedFraction = 0.25;
+  double killFraction = 0.25;
   bool perfectScore = false;
   //Player population[ NUMOFPLAYERS ];
   vector<Player> population;

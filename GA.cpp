@@ -6,6 +6,7 @@
 #include <fstream>
 #include <vector>
 #include <algorithm>
+#include <thread>
 #include "GA.h"
 
 using namespace std;
@@ -107,19 +108,38 @@ void GA::GenPopulation(){
 
 void GA::RunSimulation(){
   Player allStar;
-  opponent = vector< Player >(testingPool);
+  opponent = vector< Player >(TESTINGPOOLSIZE);
 
-  for( int i=0; i<testingPool; i++){
+  for( int i=0; i<TESTINGPOOLSIZE; i++){
     opponent[i] = Player();
   }
 
+  vector< thread > th;
+  int nr_threads = 4;
 
-  for( int generation=0; generation<numOfGenerations; generation++){
+  vector< int > args;
+  thread t;
+  for( int generation=0; generation<NUMOFGENERATIONS; generation++){
     cout << "Generation: " << generation << endl;
+    //th = vector< thread >(nr_threads);
+
+    //args = {0,10,11,20};
+    //std::thread tt(&PlayTournament, args);
+
+    /*
+    for (int i = 0; i < nr_threads; ++i) {
+      args = {i*NUMOFPLAYERS/nr_threads,
+        (i+1)*NUMOFPLAYERS/nr_threads,
+        i*TESTINGPOOLSIZE/nr_threads,
+        (i+1)*TESTINGPOOLSIZE/nr_threads};
+      th.push_back(thread(PlayTournament,args));
+
+    }
+    */
     PlayTournament();
     SortPopulation();
     cout << "Making more randoms" << endl;
-    for( int i=0; i<testingPool; i++){
+    for( int i=0; i<TESTINGPOOLSIZE; i++){
       opponent[i] = Player();
     }
 
@@ -127,23 +147,21 @@ void GA::RunSimulation(){
 
   }
 
+  return;
 
-  cout << "Going into the REAL tournament!!" << endl;
-
-
-
+  cout << "\n\n*****Going into the REAL tournament!!*****\n\n";
 
 
-  for( int generation=0; generation<numOfGenerations; generation++){
+  for( int generation=0; generation<NUMOFGENERATIONS; generation++){
     cout << "Generation: " << generation << endl;
     PlayTournament();
     SortPopulation();
 
-    for( int i=0; i<testingPool; i++){
+    for( int i=0; i<TESTINGPOOLSIZE; i++){
       opponent[i] = population[ (rand()/float(RAND_MAX))*(NUMOFPLAYERS-1) ];
     }
 
-    if( generation<numOfGenerations-1 ){
+    if( generation<NUMOFGENERATIONS-1 ){
       Breed();
     }
 
@@ -158,20 +176,49 @@ void GA::RunSimulation(){
 
 }
 
+void GA::PlayTournament( vector< int > args ) {
+
+  int p1Start=args[0];
+  int p1End=args[1];
+  int poolStart=args[2];
+  int poolEnd=args[3];
+
+  TTT game = TTT();
+  clock_t t0 = clock();
+  for( int p1Num=p1Start; p1Num<p1End; p1Num++) {
+    for( int p2Num=poolStart; p2Num<poolEnd; p2Num++){
+      //cout << p1Num << " vs " << p2Num << endl;
+      //t0 = clock();
+      PlayGame(&population[p1Num], &opponent[p2Num], &game);
+      //cout << "Time taken: " << float( clock () - t0 ) /  CLOCKS_PER_SEC << " ms" << endl;
+      game.clearBoard();
+      //PlayGame(&opponent[p2Num], &population[p1Num], &game);
+      //game.clearBoard();
+    }
+  }
+  cout << "Time taken: " << float( clock () - t0 ) /  CLOCKS_PER_SEC << " sec" << endl;
+
+
+  return;
+}
+
 void GA::PlayTournament(){
 
   TTT game = TTT();
-
-  for( int p1Num=0; p1Num<NUMOFPLAYERS-1; p1Num++) {
-    for( int p2Num=0; p2Num<testingPool; p2Num++){
+  clock_t t0 = clock();
+  for( int p1Num=0; p1Num<NUMOFPLAYERS; p1Num++) {
+    for( int p2Num=0; p2Num<TESTINGPOOLSIZE; p2Num++){
       //cout << p1Num << " vs " << p2Num << endl;
+      //t0 = clock();
       PlayGame(&population[p1Num], &opponent[p2Num], &game);
+      //cout << "Time taken: " << float( clock () - t0 ) /  CLOCKS_PER_SEC << " ms" << endl;
       game.clearBoard();
-      PlayGame(&opponent[p2Num], &population[p1Num], &game);
-      game.clearBoard();
+      //PlayGame(&opponent[p2Num], &population[p1Num], &game);
+      //game.clearBoard();
     }
-
   }
+  cout << "Time taken: " << float( clock () - t0 ) /  CLOCKS_PER_SEC << " sec" << endl;
+
 
   return;
 
@@ -239,6 +286,7 @@ void GA::PlayGame2(int p1Num, int p2Num, TTT *game){
 }
 
 void GA::PlayGame(Player *p1, Player *p2, TTT *game){
+  //clock_t t0 = clock();
 
   bool wasWinner;
 
@@ -246,7 +294,7 @@ void GA::PlayGame(Player *p1, Player *p2, TTT *game){
   p2->SetMark('o');
 
   wasWinner = false;
-  for( int turnNum=0; turnNum<9; turnNum++ ){
+  for( int turnNum=0; turnNum<9; turnNum++ ) {
       //cout << "turnNum: " << turnNum << " " << endl;
       if( turnNum % 2 == 0){
         //cout << "P1" << endl;
@@ -268,6 +316,7 @@ void GA::PlayGame(Player *p1, Player *p2, TTT *game){
         }
       }
   }
+  //cout << float( clock () - t0 ) /  CLOCKS_PER_SEC << endl;
   //game.clearBoard();
   if( !wasWinner ){
     p1->ties += 1.0;
