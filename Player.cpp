@@ -16,6 +16,9 @@ Player::Player( char _mark ){
   losses = 0.0;
 }
 */
+
+mutex m;
+
 Player::Player(){
 }
 Player::Player(int id){
@@ -57,7 +60,9 @@ double Player::MaxFitness(){
 
 int Player::TakeTurn( TTT *game ){
 
+  m.lock();
   moves = brain.run( game->getBoardLinear() );
+  m.unlock();
 
   sorted = moves;
 

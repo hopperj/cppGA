@@ -8,9 +8,11 @@
 #include <algorithm>
 #include <thread>
 #include "GA.h"
+#include <mutex>
 
 using namespace std;
 
+mutex outputMutex;
 GA::GA(){
 
   srand(time(NULL));
@@ -109,31 +111,86 @@ void GA::GenPopulation(){
 
 void GA::RunSimulation(){
   Player allStar;
-  opponent = vector< Player >(TESTINGPOOLSIZE);
+
+  vector<Player> opponent = vector< Player >(TESTINGPOOLSIZE);
 
   for( int i=0; i<TESTINGPOOLSIZE; i++){
     opponent[i] = Player(oppId);
+    opponent[i].SetMark('o');
   }
 
-  for( int generation=0; generation<NUMOFGENERATIONS; generation++){
+  vector< thread > threads = vector< thread >(numOfThreads);
+  int start,end;
+
+
+  clock_t t0 = clock();
+  for( int generation=0; generation<(int)(NUMOFGENERATIONS*0.25); generation++){
     cout << "Generation: " << generation << endl;
-    PlayTournament(0, NUMOFPLAYERS);
+
+
+    t0 = clock();
+    for( int i=0; i<numOfThreads; i++){
+      start = i*(int)((float)NUMOFPLAYERS/(float)numOfThreads);
+      end = start + (int)((float)NUMOFPLAYERS/(float)numOfThreads);
+      if( end > NUMOFPLAYERS){
+        end = NUMOFPLAYERS;
+      }
+
+      //outputMutex.lock();
+      //cout << "-->start: " << start << "\tend:" << end << endl;
+      //outputMutex.unlock();
+
+      threads[i] = thread( &GA::PlayTournament, this, start, end, opponent );
+    }
+
+    // Wait for threads to finish
+    for( int i=0; i<numOfThreads; i++){
+        outputMutex.lock();
+        cout << " waiting for thread: " << i << endl;
+        outputMutex.unlock();
+        threads[i].join();
+    }
+
+    cout << "Time taken: " << float( clock () - t0 ) /  CLOCKS_PER_SEC << " sec" << endl;
+    //PlayTournament(0, NUMOFPLAYERS);
     SortPopulation();
-    //cout << "Fitness: " << population[0].Fitness() << endl;
     for( int i=0; i<TESTINGPOOLSIZE; i++){
       opponent[i] = Player(oppId);
+      opponent[i].SetMark('o');
     }
     Breed();
   }
 
-  return;
+  //return;
 
   cout << "\n\n*****Going into the REAL tournament!!*****\n\n";
 
 
   for( int generation=0; generation<NUMOFGENERATIONS; generation++){
     cout << "Generation: " << generation << endl;
-    PlayTournament(0, NUMOFPLAYERS);
+    t0 = clock();
+    for( int i=0; i<numOfThreads; i++){
+      start = i*(int)((float)NUMOFPLAYERS/(float)numOfThreads);
+      end = start + (int)((float)NUMOFPLAYERS/(float)numOfThreads);
+      if( end > NUMOFPLAYERS){
+        end = NUMOFPLAYERS;
+      }
+
+      //outputMutex.lock();
+      //cout << "-->start: " << start << "\tend:" << end << endl;
+      //outputMutex.unlock();
+
+      threads[i] = thread( &GA::PlayTournament, this, start, end, opponent );
+    }
+
+    // Wait for threads to finish
+    for( int i=0; i<numOfThreads; i++){
+        outputMutex.lock();
+        cout << " waiting for thread: " << i << endl;
+        outputMutex.unlock();
+        threads[i].join();
+    }
+
     SortPopulation();
 
     for( int i=0; i<TESTINGPOOLSIZE; i++){
@@ -150,22 +207,31 @@ void GA::RunSimulation(){
   allStar = population[0];
   GenPopulation();
   population[0] = allStar;
-  PlayTournament(0, NUMOFPLAYERS);
+  PlayTournament(0, NUMOFPLAYERS, opponent);
   cout << "All star fitness: " << population[0].Fitness() << endl;
 
 }
 
-void GA::PlayTournament(int startNum, int endNum){
+
+void GA::PlayTournament(int startNum, int endNum, vector< Player > opponent){
+  outputMutex.lock();
+  cout << "from: " << startNum << " to: " << endNum << endl;
+  outputMutex.unlock();
+
 
   TTT game = TTT();
-  clock_t t0 = clock();
+  clock_t t0;
+  t0 = clock();
   for( int p1Num=startNum; p1Num<endNum; p1Num++) {
     for( int p2Num=0; p2Num<TESTINGPOOLSIZE; p2Num++){
       PlayGame(&population[p1Num], &opponent[p2Num], &game);
       game.clearBoard();
     }
   }
+  outputMutex.lock();
   cout << "Time taken: " << float( clock () - t0 ) /  CLOCKS_PER_SEC << " sec" << endl;
+  outputMutex.unlock();
+  //cout << "Time taken: " << float( clock () - t0 ) /  CLOCKS_PER_SEC << " sec" << endl;
 }
 
 void GA::PlayGame(Player *p1, Player *p2, TTT *game){
@@ -174,7 +240,7 @@ void GA::PlayGame(Player *p1, Player *p2, TTT *game){
   bool wasWinner;
 
   p1->SetMark('x');
-  p2->SetMark('o');
+  //p2->SetMark('o');
 
   wasWinner = false;
   //cout << "Player " << p1->Id << " vs " << p2->Id << endl;
@@ -185,7 +251,7 @@ void GA::PlayGame(Player *p1, Player *p2, TTT *game){
         if( p1->TakeTurn( game ) ){
           //cout << "-->p1 wins" << endl;
           p1->wins += 1.0;
-          p2->losses += 1.0;
+          //p2->losses += 1.0;
           wasWinner = true;
           break;
         }
@@ -193,7 +259,7 @@ void GA::PlayGame(Player *p1, Player *p2, TTT *game){
         //cout << "P2" << endl;
         if( p2->TakeTurn( game ) ){
           //cout << "-->p2 wins" << endl;
-          p2->wins += 1.0;
+          //p2->wins += 1.0;
           p1->losses += 1.0;
           wasWinner = true;
           break;
@@ -204,7 +270,7 @@ void GA::PlayGame(Player *p1, Player *p2, TTT *game){
   //game.clearBoard();
   if( !wasWinner ){
     p1->ties += 1.0;
-    p2->ties += 1.0;
+    //p2->ties += 1.0;
     //cout << "tie!" << endl;
   }
 
