@@ -16,6 +16,7 @@ class Player
 
 public:
 
+  int Id;
   char mark;
   double wins, ties, losses;
   vector<double> moves;
@@ -24,8 +25,8 @@ public:
   int potentialMove;
 
   NeuralNetwork brain;
-  Player(char _mark);
   Player();
+  Player(int id);
 
   int TakeTurn( TTT *game );
   inline int indexOf( vector<double>& v, double element );
@@ -33,4 +34,5 @@ public:
   double Fitness();
   double MaxFitness();
   void ClearScore();
+  int GetId();
 };

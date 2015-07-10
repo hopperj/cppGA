@@ -17,11 +17,19 @@ Player::Player( char _mark ){
 }
 */
 Player::Player(){
+}
+Player::Player(int id){
   brain.Init(18,18,18,9);
 
   wins = 0.0;
   ties = 0.0;
   losses = 0.0;
+
+  Id = id;
+}
+
+int Player::GetId(){
+  return Id;
 }
 
 void Player::SetMark( char _mark ){
@@ -35,7 +43,7 @@ void Player::ClearScore(){
 }
 
 double Player::Fitness(){
-  if(wins+ties+losses == 0.0 ){
+  if(wins+ties+losses == 0 ){
     return 0.0;
   }
   return 1.0 - (float)losses/(float)(wins+ties+losses);

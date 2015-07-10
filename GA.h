@@ -34,11 +34,10 @@ class GA
 public:
 
   GA();
-  void PlayGame2(int p1Num, int p2Num, TTT *game);
+  //void PlayGame2(int p1Num, int p2Num, TTT *game);
   void PlayGame(Player *p1, Player *p2, TTT *game);
-  void PlayTournament();
-  void PlayTournament(int p1Start, int p1End, int poolStart, int poolEnd);
-  void PlayTournament( vector< int > args );
+  void PlayTournament(int startNum, int endNum);
+  
   void RunSimulation();
   int indexOf( vector<double>& v, double element );
   void SortPopulation();
@@ -52,6 +51,9 @@ public:
   double breedFraction = 0.25;
   double killFraction = 0.25;
   bool perfectScore = false;
+
+  int playerId;
+  int oppId;
   //Player population[ NUMOFPLAYERS ];
   vector<Player> population;
 
