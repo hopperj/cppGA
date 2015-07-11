@@ -22,7 +22,7 @@ mutex m;
 Player::Player(){
 }
 Player::Player(int id){
-  brain.Init(18,12,12,9);
+  brain.Init(9,9,9,9);
 
   wins = 0.0;
   ties = 0.0;
@@ -60,9 +60,17 @@ double Player::MaxFitness(){
 }
 
 int Player::TakeTurn( TTT *game ){
-
+  const int numOfInputs = 9;
   m.lock();
-  moves = brain.run( game->getBoardLinear() );
+  double tmp[numOfInputs] = {0.0};
+  game->getBoardLinear( tmp );
+  /*
+  for( int i=0; i<numOfInputs; i++){
+    cout << tmp[i] << "\t";
+  }
+  */
+  //cout << " test\n";
+  moves = brain.run( tmp );
   m.unlock();
 
   sorted = moves;

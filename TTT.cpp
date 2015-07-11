@@ -66,8 +66,22 @@ int TTT::move(int x, int y, char playerToken ){
   return 1;
 }
 
-vector<double> TTT::getBoardLinear(){
-  vector<double> line = vector<double>(2*N*M,0.0);
+void TTT::getBoardLinear( double *outpt ){
+  //cout << "\n" << endl;
+  vector<double> line = vector<double>(N*M,0.0);
+  for( int i=0; i<N; i++){
+    for( int j=0; j<M; j++ ){
+      //line[i+j] = (double)board[i][j];
+      *outpt = (double)board[i][j];
+      //cout << line[i+j] << "\t";
+      //cout << *outpt << "\t";
+      outpt++;
+    }
+  }
+  //cout << " ttt\n";
+  /*
+  return line;
+
 
   for( int i=0; i<N; i++){
     for( int j=0; j<M; j++ ){
@@ -79,12 +93,8 @@ vector<double> TTT::getBoardLinear(){
 
     }
   }
-  /*
-  for( int i=0; i<2*N*M; i++){
-    cout << i << " " << line[i] << endl;
-  }
-  */
   return line;
+  */
 }
 
 int TTT::checkWinner(){

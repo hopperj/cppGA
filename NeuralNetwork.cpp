@@ -15,11 +15,12 @@ using namespace std;
 
 
 void NeuralNetwork::Init( int ins, int hidd, int nohl, int outs ){
-  numOfInputs = ins+1;
-  numOfHidden = hidd+1;
-  numOfHiddenLayers = nohl;
-  numOfOutputs = outs;
-
+  /*
+  NUMOFINPUTS = ins+1;
+  NUMOFHIDDEN = hidd+1;
+  NUMOFHIDDENLayers = nohl;
+  NUMOFOUTPUTS = outs;
+  */
   energyThreshold = 0.9;
   useThreshold = 0;
 
@@ -31,26 +32,26 @@ void NeuralNetwork::Init( int ins, int hidd, int nohl, int outs ){
 int NeuralNetwork::save() {
   ofstream fout("nn.dat");
   if( fout.is_open() ) {
-    fout << numOfInputs << "\t" << numOfHidden << "\t" << numOfHiddenLayers << "\t" << numOfOutputs << "\n\n";
+    fout << NUMOFINPUTS << "\t" << NUMOFHIDDEN << "\t" << NUMOFHIDDENLAYERS << "\t" << NUMOFOUTPUTS << "\n\n";
 
-    for( int i=0; i<numOfInputs; i++) {
-      for( int j=0; j<numOfHidden; j++) {
+    for( int i=0; i<NUMOFINPUTS; i++) {
+      for( int j=0; j<NUMOFHIDDEN; j++) {
       	fout << ihw[i][j] << "\t";
       }
     }
     fout << "\n\n";
 
-    for( int hl=0; hl<numOfHiddenLayers; hl++){
-      for( int h1=0; h1<numOfHidden; h1++){
-        for( int h2=0; h2<numOfHidden; h2++){
+    for( int hl=0; hl<NUMOFHIDDENLAYERS; hl++){
+      for( int h1=0; h1<NUMOFHIDDEN; h1++){
+        for( int h2=0; h2<NUMOFHIDDEN; h2++){
           fout << hhw[hl][h1][h2] << "\t";
         }
       }
     }
     fout << "\n\n";
 
-    for( int i=0; i<numOfHidden; i++) {
-      for( int j=0; j<numOfOutputs; j++){
+    for( int i=0; i<NUMOFHIDDEN; i++) {
+      for( int j=0; j<NUMOFOUTPUTS; j++){
       	fout << how[i][j] << "\t";
       }
     }
@@ -66,13 +67,13 @@ int NeuralNetwork::load(){
 
 
 void NeuralNetwork::RandomIHW(){
-  ihw = Random2DList( numOfInputs, numOfHidden );
+  ihw = Random2DList( NUMOFINPUTS, NUMOFHIDDEN );
 }
 
 void NeuralNetwork::PertibateBrain(){
 
-  for( int i=0; i<numOfInputs; i++ ){
-    for( int h=0; h<numOfHidden; h++ ){
+  for( int i=0; i<NUMOFINPUTS; i++ ){
+    for( int h=0; h<NUMOFHIDDEN; h++ ){
       if( rand()/float(RAND_MAX) >= mutationChance ){
         ihw[i][h] += mutationStrength*(rand()/float(RAND_MAX) - 0.5);
       }
@@ -83,9 +84,9 @@ void NeuralNetwork::PertibateBrain(){
     }
   }
 
-  for( int hl=0; hl<numOfHiddenLayers; hl++){
-    for( int h1=0; h1<numOfHidden; h1++){
-      for( int h2=0; h2<numOfHidden; h2++){
+  for( int hl=0; hl<NUMOFHIDDENLAYERS; hl++){
+    for( int h1=0; h1<NUMOFHIDDEN; h1++){
+      for( int h2=0; h2<NUMOFHIDDEN; h2++){
         if( rand()/float(RAND_MAX) >= mutationChance ){
           hhw[hl][h1][h2] += mutationStrength*(rand()/float(RAND_MAX) - 0.5);
         }
@@ -96,8 +97,8 @@ void NeuralNetwork::PertibateBrain(){
     }
   }
 
-  for( int h=0; h<numOfHidden; h++ ){
-    for( int o=0; o<numOfOutputs; o++ ){
+  for( int h=0; h<NUMOFHIDDEN; h++ ){
+    for( int o=0; o<NUMOFOUTPUTS; o++ ){
       if( rand()/float(RAND_MAX) >= mutationChance ){
         how[h][o] += mutationStrength*(rand()/float(RAND_MAX) - 0.5);
       }
@@ -127,9 +128,9 @@ vector< vector<double> > NeuralNetwork::Random2DList( int n, int m){
 
 
 void NeuralNetwork::RandomHHW(){
-  hhw = vector< vector< vector<double> > >(numOfHiddenLayers);
-  for( int i=0; i<numOfHiddenLayers; i++){
-    hhw[i] = Random2DList( numOfHidden, numOfHidden );
+  hhw = vector< vector< vector<double> > >(NUMOFHIDDENLAYERS);
+  for( int i=0; i<NUMOFHIDDENLAYERS; i++){
+    hhw[i] = Random2DList( NUMOFHIDDEN, NUMOFHIDDEN );
   }
 }
 
@@ -143,7 +144,7 @@ void NeuralNetwork::print2DVector(vector< vector<double> > a2d){
 }
 
 void NeuralNetwork::PrintHHW(){
-  for( int hl=0; hl<numOfHiddenLayers; hl++){
+  for( int hl=0; hl<NUMOFHIDDENLAYERS; hl++){
     print2DVector( hhw[hl] );
     cout << "\n\n";
   }
@@ -151,10 +152,10 @@ void NeuralNetwork::PrintHHW(){
 
 
 void NeuralNetwork::PrintIHW(){
-  for( int i=0; i<numOfInputs; i++){
-    for( int j=0; j<numOfHidden; j++){
+  for( int i=0; i<NUMOFINPUTS; i++){
+    for( int j=0; j<NUMOFHIDDEN; j++){
       cout << ihw[i][j];
-      if (j<numOfHidden-1){
+      if (j<NUMOFHIDDEN-1){
 	       cout << ", ";
       }
     }
@@ -167,7 +168,7 @@ vector< vector<double> > NeuralNetwork::getIHW(){
 }
 
 void NeuralNetwork::RandomHOW(){
-  how = Random2DList(numOfHidden, numOfOutputs);
+  how = Random2DList(NUMOFHIDDEN, NUMOFOUTPUTS);
 }
 
 vector< vector<double> > NeuralNetwork::getHOW(){
@@ -175,10 +176,10 @@ vector< vector<double> > NeuralNetwork::getHOW(){
 }
 
 void NeuralNetwork::PrintHOW(){
-  for( int i=0; i<numOfHidden; i++){
-    for( int j=0; j<numOfOutputs; j++){
+  for( int i=0; i<NUMOFHIDDEN; i++){
+    for( int j=0; j<NUMOFOUTPUTS; j++){
       cout << how[i][j];
-      if (j<numOfOutputs-1){
+      if (j<NUMOFOUTPUTS-1){
 	       cout << ", ";
       }
     }
@@ -187,11 +188,14 @@ void NeuralNetwork::PrintHOW(){
 }
 
 void NeuralNetwork::resetNodes(){
-  inputs = vector<double>(numOfInputs);
+  inputs = vector<double>(NUMOFINPUTS);
   // Set the bias node
-  inputs[numOfInputs-1] = 1.0;
-  hidden = Random2DList( numOfHidden, numOfHidden);
-  outputs = vector<double>(numOfOutputs);
+  inputs[NUMOFINPUTS-1] = 1.0;
+  hidden = Random2DList( NUMOFHIDDEN, NUMOFHIDDEN);
+  for( int i=0; i<NUMOFHIDDEN; i++){
+    hidden[i][ NUMOFHIDDEN-1 ] = 1.0;
+  }
+  outputs = vector<double>(NUMOFOUTPUTS);
 }
 
 double NeuralNetwork::sigmoid(double x){
@@ -202,35 +206,42 @@ double NeuralNetwork::dsigmoid(double x){
   return x*( 1.0 - x );
 }
 
-vector< double > NeuralNetwork::run( vector< double > inpt){
+vector< double > NeuralNetwork::run( double *inpt){
   resetNodes();
-  for( int i=0; i<inpt.size(); i++ ){
+  for( int i=0; i<NUMOFINPUTS-1; i++ ){
     inputs[i] = inpt[i];
+    //cout << inpt[i] << "\t";
   }
+  //cout << " run\n";
 
-  vector< double > result = feedForward();
+  feedForward();
   if (useThreshold == 1){
+    vector< double > result;
+    for( int o=0; o<NUMOFOUTPUTS; o++ ){
+      // z = (x > y) ? z : y;
+      result[o] = ( outputs[o] > energyThreshold ) ? 1.0 : 0.0;
+    }
     return result;
   } else {
     return outputs;
   }
 }
 
-vector<double> NeuralNetwork::feedForward(){
-  for( int i=0; i<numOfInputs; i++){
-    for( int h=0; h<numOfHidden; h++){
+void NeuralNetwork::feedForward(){
+  for( int i=0; i<NUMOFINPUTS; i++){
+    for( int h=0; h<NUMOFHIDDEN; h++){
       hidden[0][h] += inputs[i]*ihw[i][h];
     }
   }
   // Sigmoid function all hidden nodes
-  for( int h=0; h<numOfHidden; h++){
+  for( int h=0; h<NUMOFHIDDEN; h++){
     hidden[0][h] = sigmoid( hidden[0][h] );
   }
 
-  for( int hl=1; hl<numOfHiddenLayers; hl++){
+  for( int hl=1; hl<NUMOFHIDDENLAYERS; hl++){
 
-    for( int h1=0; h1<numOfHidden; h1++){
-      for( int h2=0; h2<numOfHidden; h2++){
+    for( int h1=0; h1<NUMOFHIDDEN; h1++){
+      for( int h2=0; h2<NUMOFHIDDEN; h2++){
         hidden[ hl ][h1] += hidden[hl-1][ h2 ]*hhw[hl][h1][h2];
       }
       hidden[ hl ][ h1 ] = sigmoid(hidden[hl][h1]);
@@ -238,27 +249,24 @@ vector<double> NeuralNetwork::feedForward(){
   }
 
   // Sum energies for output nodes
-  for( int o=0; o<numOfOutputs; o++ ){
-    for( int h=0; h<numOfHidden; h++){
-      outputs[o] += hidden[numOfHiddenLayers-1][h]*how[h][o];
+  for( int o=0; o<NUMOFOUTPUTS; o++ ){
+    for( int h=0; h<NUMOFHIDDEN; h++){
+      outputs[o] += hidden[NUMOFHIDDENLAYERS-1][h]*how[h][o];
     }
     outputs[o] = sigmoid( outputs[o] );
   }
 
-  vector<double> threshOuts(numOfOutputs, 0.0);
+  //vector<double> threshOuts(NUMOFOUTPUTS, 0.0);
 
-  for( int o=0; o<numOfOutputs; o++ ){
-    // z = (x > y) ? z : y;
-    threshOuts[o] = ( outputs[o] > energyThreshold ) ? 1.0 : 0.0;
-  }
 
-  return threshOuts;
+
+  //return threshOuts;
 }
 
 
 void NeuralNetwork::customIHW(){
 
-  for( int i=0; i<numOfInputs; i++ ){
+  for( int i=0; i<NUMOFINPUTS; i++ ){
     vector<double> v {0.0,1.0,2.0};
     ihw[i] = v;
   }
@@ -270,7 +278,7 @@ void NeuralNetwork::customIHW(){
 
 void NeuralNetwork::customHOW(){
 
-  for( int i=0; i<numOfHidden; i++ ){
+  for( int i=0; i<NUMOFHIDDEN; i++ ){
     vector<double> v {0.0,1.0,2.0};
     how[i] = v;
   }

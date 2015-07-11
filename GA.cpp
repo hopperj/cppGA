@@ -60,7 +60,7 @@ void GA::SortPopulation(){
 
   reverse( newPopulation.begin(), newPopulation.end() );
 
-  cout << "Max Fitness: " << newPopulation[0].Fitness() << endl;
+  cout << "Max Fitness: " << newPopulation[0].Fitness()/(float)TESTINGPOOLSIZE << endl;
   cout << "Average Fitness: " << averageFitness << endl << endl;
   //cout << newPopulation[0].wins << " " << newPopulation[0].ties << " " << newPopulation[0].losses << endl;
   //cout << NUMOFPLAYERS-1 << " " << newPopulation[NUMOFPLAYERS-1].Fitness() << endl;
@@ -213,7 +213,7 @@ void GA::RunSimulation(){
   GenPopulation();
   population[0] = allStar;
   PlayTournament(0, NUMOFPLAYERS, opponent);
-  cout << "All star fitness: " << population[0].Fitness() << endl;
+  cout << "All star fitness: " << population[0].Fitness()/(float)TESTINGPOOLSIZE << endl;
 
   char inpt;
   while(1){
@@ -317,7 +317,7 @@ void GA::PlayGame(Player *p1, Player *p2, TTT *game){
         if( p1->TakeTurn( game ) ){
           //cout << "-->p1 wins" << endl;
           //p1->wins += 1.0;
-          p1->wins += 1.0 - (float)turnNum/10.0;
+          p1->wins += 1.50 - (float)turnNum/10.0;
           //p2->losses += 1.0;
           wasWinner = true;
           break;
@@ -327,7 +327,7 @@ void GA::PlayGame(Player *p1, Player *p2, TTT *game){
         if( p2->TakeTurn( game ) ){
           //cout << "-->p2 wins" << endl;
           //p2->wins += 1.0;
-          p1-> wins -= 1.0 - (float)turnNum/10.0;
+          p1-> wins -= 2.00 - (float)turnNum/10.0;
           //p1->losses += 1.0;
           wasWinner = true;
           break;
@@ -338,6 +338,7 @@ void GA::PlayGame(Player *p1, Player *p2, TTT *game){
   //game.clearBoard();
   if( !wasWinner ){
     p1->ties += 1.0;
+    p1->wins += 0.25;
     //p2->ties += 1.0;
     //cout << "tie!" << endl;
   }
