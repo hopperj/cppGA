@@ -25,14 +25,21 @@ void TTT::clearBoard(){
 }
 
 int TTT::isValidMove(int x, int y){
-  return board[x][y] == 0;
+  return board[x][y] == 0 && x < N && y < M;
 }
 
 void TTT::printBoard(){
   for( int i=0; i<N; i++ ) {
     cout << "\t";
     for( int j=0; j<M; j++ ) {
-      cout << board[i][j] << " ";
+      if( board[i][j] == -1){
+        cout << 'x' << " ";
+      } else if( board[i][j] == 1){
+        cout << 'o' << " ";
+      } else {
+        cout << ' ' << " ";
+      }
+      //cout << board[i][j] << " ";
       if( j<M-1){
 	       cout << "| ";
       }
@@ -46,13 +53,14 @@ void TTT::printBoard(){
 }
 
 int TTT::move(int x, int y, char playerToken ){
+  //cout << "trying " << x << " " << y << endl;
   if( isValidMove(x,y) ){
     //board[x][y] = playerValues[ playerNum ];
     //cout << "Using player token: " << playerToken << endl;
     board[x][y] = playerMap[ playerToken ];
     //printBoard();
     //cout << "p" << playerMap[ playerToken ] << endl;
-    //cout << x << " " << y << " set by " << playerNum << endl;
+    //cout << x << " " << y << " set by " << playerToken << " " << board[x][y] << endl;
     return 0;
   }
   return 1;

@@ -22,7 +22,7 @@ mutex m;
 Player::Player(){
 }
 Player::Player(int id){
-  brain.Init(18,18,18,9);
+  brain.Init(18,12,12,9);
 
   wins = 0.0;
   ties = 0.0;
@@ -49,6 +49,7 @@ double Player::Fitness(){
   if(wins+ties+losses == 0 ){
     return 0.0;
   }
+  return wins;
   return 1.0 - (float)losses/(float)(wins+ties+losses);
   return (5.0*wins + 4.0*ties - 10.0*losses)/(float)(wins+ties+losses);
 }
