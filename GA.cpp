@@ -152,15 +152,14 @@ void GA::RunSimulation(){
     }
 
     // Wait for threads to finish
+    outputMutex.lock();
+    cout << " waiting for threads: " << endl;
+    outputMutex.unlock();
     for( int i=0; i<numOfThreads; i++){
-        outputMutex.lock();
-        cout << " waiting for thread: " << i << endl;
-        outputMutex.unlock();
         threads[i].join();
-        cout << "thread done" << endl;
     }
     //break;
-    //cout << "Time taken: " << float( clock () - t0 ) /  CLOCKS_PER_SEC << " sec" << endl;
+    cout << "Time taken: " << float( clock () - t0 ) /  CLOCKS_PER_SEC << " sec" << endl;
     //PlayTournament(0, NUMOFPLAYERS);
     SortPopulation();
     for( int i=0; i<TESTINGPOOLSIZE; i++){
@@ -221,7 +220,7 @@ void GA::RunSimulation(){
 
   return;
 
-  
+
   char inpt;
   while(1){
     PlayHumanGame(&allStar);
@@ -242,17 +241,16 @@ void GA::PlayTournament(int startNum, int endNum, vector< Player > opponent){
 
 
   TTT game = TTT();
-  clock_t t0;
-  t0 = clock();
+
   for( int p1Num=startNum; p1Num<endNum; p1Num++) {
     for( int p2Num=0; p2Num<TESTINGPOOLSIZE; p2Num++){
       PlayGame(&population[p1Num], &opponent[p2Num], &game);
       game.clearBoard();
     }
   }
-  outputMutex.lock();
-  cout << "Time taken: " << float( clock () - t0 ) /  CLOCKS_PER_SEC << " sec" << endl;
-  outputMutex.unlock();
+  //outputMutex.lock();
+  //cout << "Time taken: " << float( clock () - t0 ) /  CLOCKS_PER_SEC << " sec" << endl;
+  //outputMutex.unlock();
   //cout << "Time taken: " << float( clock () - t0 ) /  CLOCKS_PER_SEC << " sec" << endl;
 }
 
