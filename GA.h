@@ -1,6 +1,6 @@
 
-#define NUMOFPLAYERS 500
-#define TESTINGPOOLSIZE 75
+#define NUMOFPLAYERS 2000
+#define TESTINGPOOLSIZE 200
 #define NUMOFGENERATIONS 100
 
 
@@ -54,7 +54,7 @@ public:
   double killFraction = 0.25;
   bool perfectScore = false;
 
-  int numOfThreads = 4;
+  int numOfThreads = 1;
 
 
   int playerId;

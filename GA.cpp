@@ -13,7 +13,7 @@
 using namespace std;
 
 mutex outputMutex;
-//mutex m;
+mutex m;
 GA::GA(){
 
   srand(time(NULL));
@@ -159,7 +159,7 @@ void GA::RunSimulation(){
         threads[i].join();
         cout << "thread done" << endl;
     }
-    break;
+    //break;
     //cout << "Time taken: " << float( clock () - t0 ) /  CLOCKS_PER_SEC << " sec" << endl;
     //PlayTournament(0, NUMOFPLAYERS);
     SortPopulation();
@@ -170,7 +170,7 @@ void GA::RunSimulation(){
     Breed();
   }
 
-  return;
+  //return;
 
   cout << "\n\n*****Going into the REAL tournament!!*****\n\n";
 
@@ -219,6 +219,9 @@ void GA::RunSimulation(){
   PlayTournament(0, NUMOFPLAYERS, opponent);
   cout << "All star fitness: " << population[0].Fitness()/(float)TESTINGPOOLSIZE << endl;
 
+  return;
+
+  
   char inpt;
   while(1){
     PlayHumanGame(&allStar);
@@ -327,7 +330,7 @@ void GA::PlayGame(Player *p1, Player *p2, TTT *game){
         }
       } else {
         //cout << "P2" << endl;
-        if( p2->TakeTurn( game ) ){
+        if( p2->TakeTurn( game, &m ) ){
           //cout << "-->p2 wins" << endl;
           //p2->wins += 1.0;
           p1-> wins -= 2.50 - (float)turnNum/9.0;

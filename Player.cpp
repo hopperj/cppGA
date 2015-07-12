@@ -17,7 +17,7 @@ Player::Player( char _mark ){
 }
 */
 
-mutex m;
+//mutex m;
 
 Player::Player(){
 }
@@ -58,7 +58,12 @@ double Player::MaxFitness(){
   return 1.0;
   return 5.0;
 }
-
+int Player::TakeTurn( TTT *game, mutex *m ){
+  m->lock();
+  int ret = TakeTurn( game );
+  m->unlock();
+  return ret;
+}
 int Player::TakeTurn( TTT *game ){
   const int numOfInputs = 9;
 
@@ -71,10 +76,8 @@ int Player::TakeTurn( TTT *game ){
   }
   */
   //cout << " test\n";
-  m.lock();
   //cout << "running brain" << endl;
   moves = brain.run( tmp );
-  m.unlock();
 
   sorted = moves;
 

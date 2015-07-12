@@ -29,6 +29,7 @@ public:
   Player(int id);
 
   int TakeTurn( TTT *game );
+  int TakeTurn( TTT *game, mutex *m );
   inline int indexOf( vector<double>& v, double element );
   void SetMark( char _mark );
   double Fitness();
