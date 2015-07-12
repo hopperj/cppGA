@@ -1,3 +1,9 @@
+
+#define NUMOFPLAYERS 500
+#define TESTINGPOOLSIZE 75
+#define NUMOFGENERATIONS 100
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
@@ -24,9 +30,6 @@
 #include "Player.h"
 #endif
 
-#define NUMOFPLAYERS 1000
-#define TESTINGPOOLSIZE 100
-#define NUMOFGENERATIONS 25
 using namespace std;
 
 
@@ -37,6 +40,7 @@ public:
 
   GA();
   void PlayGame(Player *p1, Player *p2, TTT *game);
+  void PlayHumanGame(Player *p1);
   void PlayTournament(int startNum, int endNum, vector< Player > opponent);
 
   void RunSimulation();

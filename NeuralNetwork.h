@@ -10,10 +10,15 @@
 #endif
 using namespace std;
 
+#define NUMOFINPUTS 10
+#define NUMOFHIDDEN 19
+#define NUMOFHIDDENLAYERS 19
+#define NUMOFOUTPUTS 9
+
 class NeuralNetwork
 {
 public:
-  int numOfInputs, numOfHidden, numOfOutputs, numOfHiddenLayers;
+  //int numOfInputs, numOfHidden, numOfOutputs, numOfHiddenLayers;
   vector<double> inputs;
   vector< vector<double> > hidden;
   vector<double> outputs;
@@ -49,6 +54,7 @@ public:
   int load();
 
   vector< double > run( vector< double> inpt );
+  vector< double > run( double *inpt);
 
 private:
   double sigmoid(double x);
@@ -64,5 +70,5 @@ private:
 
   void print2DVector( vector< vector<double> > a2d);
 
-  vector< double > feedForward();
+  void feedForward();
 };

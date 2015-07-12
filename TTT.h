@@ -27,7 +27,7 @@ public:
   TTT();
 
   void clearBoard();
-  vector<double> getBoardLinear();
+  void getBoardLinear( double *outpt );
   int unitTest();
 
   int isValidMove(int x, int y);
