@@ -6,10 +6,10 @@
 #include <fstream>
 #include <vector>
 #include <algorithm>
+//#include <boost/thread.hpp>
 #include <thread>
 #include "GA.h"
 #include <mutex>
-
 using namespace std;
 
 mutex outputMutex;
@@ -286,7 +286,6 @@ void GA::PlayHumanGame(Player *p1){
               return;
             }
             cout << "GOT " << (int)playerMove << endl;
-
           }
           wasWinner = game.checkWinner();
           if( wasWinner ){
@@ -317,7 +316,7 @@ void GA::PlayGame(Player *p1, Player *p2, TTT *game){
         if( p1->TakeTurn( game ) ){
           //cout << "-->p1 wins" << endl;
           //p1->wins += 1.0;
-          p1->wins += 1.50 - (float)turnNum/10.0;
+          p1->wins += 1.50 - (float)turnNum/9.0;
           //p2->losses += 1.0;
           wasWinner = true;
           break;
@@ -327,7 +326,7 @@ void GA::PlayGame(Player *p1, Player *p2, TTT *game){
         if( p2->TakeTurn( game ) ){
           //cout << "-->p2 wins" << endl;
           //p2->wins += 1.0;
-          p1-> wins -= 2.00 - (float)turnNum/10.0;
+          p1-> wins -= 2.50 - (float)turnNum/9.0;
           //p1->losses += 1.0;
           wasWinner = true;
           break;

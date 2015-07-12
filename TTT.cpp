@@ -78,23 +78,6 @@ void TTT::getBoardLinear( double *outpt ){
       outpt++;
     }
   }
-  //cout << " ttt\n";
-  /*
-  return line;
-
-
-  for( int i=0; i<N; i++){
-    for( int j=0; j<M; j++ ){
-      if( board[i][j] == -1 ){
-        line[2*i+2*j] = board[i][j];
-      } else {
-        line[2*i+2*j+1] = board[i][j];
-      }
-
-    }
-  }
-  return line;
-  */
 }
 
 int TTT::checkWinner(){
