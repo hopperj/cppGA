@@ -1,7 +1,7 @@
 
 
-CC=g++
-CFLAGS=-c -I/opt/local/include -Wall -std=c++0x -O3 -lboost
+CC=clang++
+CFLAGS=-c -Wall -std=c++0x -O3
 LDFLAGS=
 SOURCES=NeuralNetwork.cpp TTT.cpp GA.cpp Player.cpp
 OBJECTS=$(SOURCES:.cpp=.o)

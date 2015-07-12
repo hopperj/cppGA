@@ -61,7 +61,8 @@ double Player::MaxFitness(){
 
 int Player::TakeTurn( TTT *game ){
   const int numOfInputs = 9;
-  m.lock();
+
+  //cout << "doing stuff" << endl;
   double tmp[numOfInputs] = {0.0};
   game->getBoardLinear( tmp );
   /*
@@ -70,6 +71,8 @@ int Player::TakeTurn( TTT *game ){
   }
   */
   //cout << " test\n";
+  m.lock();
+  //cout << "running brain" << endl;
   moves = brain.run( tmp );
   m.unlock();
 

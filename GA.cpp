@@ -13,6 +13,7 @@
 using namespace std;
 
 mutex outputMutex;
+//mutex m;
 GA::GA(){
 
   srand(time(NULL));
@@ -124,11 +125,13 @@ void GA::RunSimulation(){
     opponent[i].SetMark('o');
   }
 
+  // thread_ = boost::thread( &clientTCP::run , this, f );
   vector< thread > threads = vector< thread >(numOfThreads);
   int start,end;
 
 
   clock_t t0 = clock();
+  thread t;
   for( int generation=0; generation<(int)(NUMOFGENERATIONS*0.25); generation++){
     cout << "Generation: " << generation << endl;
 
@@ -144,18 +147,19 @@ void GA::RunSimulation(){
       //outputMutex.lock();
       //cout << "-->start: " << start << "\tend:" << end << endl;
       //outputMutex.unlock();
-
+      //threads[i] = boost::thread( &GA::PlayTournament, this, start, end, opponent );
       threads[i] = thread( &GA::PlayTournament, this, start, end, opponent );
     }
 
     // Wait for threads to finish
     for( int i=0; i<numOfThreads; i++){
         outputMutex.lock();
-        //cout << " waiting for thread: " << i << endl;
+        cout << " waiting for thread: " << i << endl;
         outputMutex.unlock();
         threads[i].join();
+        cout << "thread done" << endl;
     }
-
+    break;
     //cout << "Time taken: " << float( clock () - t0 ) /  CLOCKS_PER_SEC << " sec" << endl;
     //PlayTournament(0, NUMOFPLAYERS);
     SortPopulation();
@@ -166,7 +170,7 @@ void GA::RunSimulation(){
     Breed();
   }
 
-  //return;
+  return;
 
   cout << "\n\n*****Going into the REAL tournament!!*****\n\n";
 
@@ -184,14 +188,14 @@ void GA::RunSimulation(){
       //outputMutex.lock();
       //cout << "-->start: " << start << "\tend:" << end << endl;
       //outputMutex.unlock();
-
+      //threads[i] = boost::thread( &GA::PlayTournament, this, start, end, opponent );
       threads[i] = thread( &GA::PlayTournament, this, start, end, opponent );
     }
 
     // Wait for threads to finish
     for( int i=0; i<numOfThreads; i++){
         outputMutex.lock();
-        //cout << " waiting for thread: " << i << endl;
+        cout << " waiting for thread: " << i << endl;
         outputMutex.unlock();
         threads[i].join();
     }
@@ -336,7 +340,7 @@ void GA::PlayGame(Player *p1, Player *p2, TTT *game){
   //cout << float( clock () - t0 ) /  CLOCKS_PER_SEC << endl;
   //game.clearBoard();
   if( !wasWinner ){
-    p1->ties += 1.0;
+    //p1->ties += 1.0;
     p1->wins += 0.25;
     //p2->ties += 1.0;
     //cout << "tie!" << endl;

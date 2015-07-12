@@ -54,7 +54,7 @@ public:
   double killFraction = 0.25;
   bool perfectScore = false;
 
-  int numOfThreads = 1;
+  int numOfThreads = 4;
 
 
   int playerId;
