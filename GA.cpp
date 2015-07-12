@@ -6,14 +6,23 @@
 #include <fstream>
 #include <vector>
 #include <algorithm>
-//#include <boost/thread.hpp>
-#include <thread>
-#include "GA.h"
-#include <mutex>
-using namespace std;
 
-mutex outputMutex;
-mutex m;
+/*
+#include <boost/thread/thread.hpp>
+#include <boost/thread/mutex.hpp>
+#include <boost/bind.hpp>
+*/
+#include <boost/thread.hpp>
+#include <boost/thread/mutex.hpp>
+//#include <thread>
+#include "GA.h"
+//#include <mutex>
+using namespace std;
+using namespace boost;
+//using boost::mutex;
+
+boost::mutex outputMutex;
+boost::mutex m;
 GA::GA(){
 
   srand(time(NULL));
@@ -126,12 +135,12 @@ void GA::RunSimulation(){
   }
 
   // thread_ = boost::thread( &clientTCP::run , this, f );
-  vector< thread > threads = vector< thread >(numOfThreads);
+  vector< boost::thread > threads = vector< boost::thread >(numOfThreads);
   int start,end;
 
 
   clock_t t0 = clock();
-  thread t;
+  boost::thread t;
   for( int generation=0; generation<(int)(NUMOFGENERATIONS*0.25); generation++){
     cout << "Generation: " << generation << endl;
 
@@ -148,7 +157,7 @@ void GA::RunSimulation(){
       //cout << "-->start: " << start << "\tend:" << end << endl;
       //outputMutex.unlock();
       //threads[i] = boost::thread( &GA::PlayTournament, this, start, end, opponent );
-      threads[i] = thread( &GA::PlayTournament, this, start, end, opponent );
+      threads[i] = boost::thread( &GA::PlayTournament, this, start, end, opponent );
     }
 
     // Wait for threads to finish
@@ -188,7 +197,9 @@ void GA::RunSimulation(){
       //cout << "-->start: " << start << "\tend:" << end << endl;
       //outputMutex.unlock();
       //threads[i] = boost::thread( &GA::PlayTournament, this, start, end, opponent );
-      threads[i] = thread( &GA::PlayTournament, this, start, end, opponent );
+
+
+      //threads[i] = thread( &GA::PlayTournament, this, start, end, opponent );
     }
 
     // Wait for threads to finish

@@ -10,7 +10,11 @@
 #include "TTT.h"
 #endif
 
-#include <mutex>
+//#include <mutex>
+#include <boost/thread.hpp>
+#include <boost/thread/mutex.hpp>
+using namespace std;
+using namespace boost;
 
 class Player
 {
@@ -30,7 +34,7 @@ public:
   Player(int id);
 
   int TakeTurn( TTT *game );
-  int TakeTurn( TTT *game, mutex *m );
+  int TakeTurn( TTT *game, boost::mutex *m );
   inline int indexOf( vector<double>& v, double element );
   void SetMark( char _mark );
   double Fitness();

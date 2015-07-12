@@ -1,7 +1,9 @@
 #include "Player.h"
 #include <algorithm>
 #include <iostream>
-#include <mutex>
+//#include <mutex>
+#include <boost/thread.hpp>
+#include <boost/thread/mutex.hpp>
 /*
 #ifndef TT
 #include "TTT.h"
@@ -19,6 +21,9 @@ Player::Player( char _mark ){
 */
 
 //mutex m;
+
+using namespace std;
+using namespace boost;
 
 Player::Player(){
 }
@@ -59,7 +64,7 @@ double Player::MaxFitness(){
   return 1.0;
   return 5.0;
 }
-int Player::TakeTurn( TTT *game, mutex *m ){
+int Player::TakeTurn( TTT *game, boost::mutex *m ){
   m->lock();
   int ret = TakeTurn( game );
   m->unlock();
