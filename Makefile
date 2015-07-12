@@ -1,7 +1,7 @@
 
 
-CC=clang++
-CFLAGS=-c -Wall -std=c++0x -O3
+CC=g++
+CFLAGS=-c -Wall -std=c++0x -O3 -pthread
 LDFLAGS=
 SOURCES=NeuralNetwork.cpp TTT.cpp GA.cpp Player.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
