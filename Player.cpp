@@ -1,9 +1,9 @@
 #include "Player.h"
 #include <algorithm>
 #include <iostream>
-//#include <mutex>
-#include <boost/thread.hpp>
-#include <boost/thread/mutex.hpp>
+#include <mutex>
+//#include <boost/thread.hpp>
+//#include <boost/thread/mutex.hpp>
 /*
 #ifndef TT
 #include "TTT.h"
@@ -23,7 +23,7 @@ Player::Player( char _mark ){
 //mutex m;
 
 using namespace std;
-using namespace boost;
+//using namespace boost;
 
 Player::Player(){
 }
@@ -64,10 +64,10 @@ double Player::MaxFitness(){
   return 1.0;
   return 5.0;
 }
-int Player::TakeTurn( TTT *game, boost::mutex *m ){
-  m->lock();
+int Player::TakeTurn( TTT *game, mutex *m ){
+  //m->lock();
   int ret = TakeTurn( game );
-  m->unlock();
+  //m->unlock();
   return ret;
 }
 int Player::TakeTurn( TTT *game ){
@@ -83,7 +83,7 @@ int Player::TakeTurn( TTT *game ){
   */
   //cout << " test\n";
   //cout << "running brain" << endl;
-  moves = brain.run( tmp );
+  moves = brain.run( &tmp[0] );
 
   sorted = moves;
 
@@ -107,15 +107,19 @@ int Player::TakeTurn( TTT *game ){
 }
 
 inline int Player::indexOf( vector<double>& v, double element ) {
-  for( int i=0; i<v.size(); i++){
+  for( unsigned int i=0; i<v.size(); i++){
     if( v[i]==element ){
       return i;
     }
   }
   cout << "\n\nCouldn't find: "<<element<<endl;
-  for( int i=0; i<v.size(); i++){
+  for( unsigned int i=0; i<v.size(); i++){
     cout << v[i] << " " << element << endl;
   }
   cout << "\n\n";
   return -1;
+}
+
+void Player::LoadBrain(){
+  brain.load();
 }

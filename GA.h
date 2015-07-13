@@ -1,7 +1,7 @@
 
 #define NUMOFPLAYERS 1000
-#define TESTINGPOOLSIZE 200
-#define NUMOFGENERATIONS 100
+#define TESTINGPOOLSIZE 100
+#define NUMOFGENERATIONS 1
 
 
 #include <stdio.h>
@@ -39,9 +39,13 @@ class GA
 public:
 
   GA();
-  void PlayGame(Player *p1, Player *p2, TTT *game);
+  void PlayGame(Player *p1, Player *p2, TTT *game, int playerNum);
   void PlayHumanGame(Player *p1);
   void PlayTournament(int startNum, int endNum, vector< Player > opponent);
+
+  void PlayHumanTournament(Player *allStar);
+
+  void Resume();
 
   void RunSimulation();
   int indexOf( vector<double>& v, double element );
@@ -54,7 +58,7 @@ public:
   double killFraction = 0.25;
   bool perfectScore = false;
 
-  int numOfThreads = 7;
+  int numOfThreads = 2;
 
 
   int playerId;

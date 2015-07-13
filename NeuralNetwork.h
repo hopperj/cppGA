@@ -10,14 +10,17 @@
 #endif
 using namespace std;
 
-#define NUMOFINPUTS 10
-#define NUMOFHIDDEN 19
-#define NUMOFHIDDENLAYERS 19
-#define NUMOFOUTPUTS 9
-
 class NeuralNetwork
 {
 public:
+
+
+  int NUMOFINPUTS = 10;
+  int NUMOFHIDDEN = 19;
+  int NUMOFHIDDENLAYERS = 19;
+  int NUMOFOUTPUTS = 9;
+
+
   //int numOfInputs, numOfHidden, numOfOutputs, numOfHiddenLayers;
   vector<double> inputs;
   vector< vector<double> > hidden;
