@@ -1,30 +1,38 @@
 #include <iostream>
 #include <boost/thread.hpp>
 #include <boost/date_time.hpp>
+//#include <boost/thread/mutex.hpp>
 
-void workerFunc()
+//void workerFunc( boost::mutex *m)
+void workerFunc( )
 {
-    boost::posix_time::seconds workTime(3);
 
-    std::cout << "Worker: running" << std::endl;
+  //m->lock();
+  boost::posix_time::seconds workTime(3);
 
-    // Pretend to do something useful...
-    boost::this_thread::sleep(workTime);
+  std::cout << "Worker: running" << std::endl;
 
-    std::cout << "Worker: finished" << std::endl;
+  // Pretend to do something useful...
+  boost::this_thread::sleep(workTime);
+
+  std::cout << "Worker: finished" << std::endl;
+  //m->unlock();
 }
 
 int main(int argc, char* argv[])
 {
-    std::cout << "main: startup" << std::endl;
+  //boost::mutex m1;
 
-    boost::thread workerThread(workerFunc);
+  std::cout << "main: startup" << std::endl;
 
-    std::cout << "main: waiting for thread" << std::endl;
+  //boost::thread workerThread(workerFunc, &m1);
+  boost::thread workerThread(workerFunc);
 
-    workerThread.join();
+  std::cout << "main: waiting for thread" << std::endl;
 
-    std::cout << "main: done" << std::endl;
+  workerThread.join();
 
-    return 0;
+  std::cout << "main: done" << std::endl;
+
+  return 0;
 }

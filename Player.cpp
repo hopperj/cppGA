@@ -1,6 +1,7 @@
 #include "Player.h"
 #include <algorithm>
 #include <iostream>
+<<<<<<< HEAD
 #include <mutex>
 //#include <boost/thread.hpp>
 //#include <boost/thread/mutex.hpp>
@@ -21,6 +22,7 @@ Player::Player( char _mark ){
 */
 
 //mutex m;
+
 
 using namespace std;
 //using namespace boost;
