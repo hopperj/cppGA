@@ -4,23 +4,6 @@
 //#include <mutex>
 #include <boost/thread.hpp>
 #include <boost/thread/mutex.hpp>
-/*
-#ifndef TT
-#include "TTT.h"
-#endif
-*/
-/*
-Player::Player( char _mark ){
-  brain.Init(18,18,18,9);
-  mark = _mark;
-
-  wins = 0.0;
-  ties = 0.0;
-  losses = 0.0;
-}
-*/
-
-//mutex m;
 
 using namespace std;
 using namespace boost;

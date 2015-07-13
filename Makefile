@@ -1,8 +1,8 @@
 
 
 CC=g++
-CFLAGS=-c -Wall -std=c++11 -O3 -L /usr/lib -I /usr/include -lboost_thread -lboost_mutex
-LDFLAGS=-L /usr/lib -I /usr/include -lboost_thread -lboost_mutex
+CFLAGS=-c -Wall -std=c++0x -stdlib=libc++ -O3 -L /opt/local/include/boost/ -L /usr/lib -I /usr/include -lboost_thread -lboost_mutex
+LDFLAGS= -stdlib=libc++ -L /opt/local/include/boost/ -L /usr/lib -I /usr/include -lboost_thread -lboost_mutex
 SOURCES=NeuralNetwork.cpp TTT.cpp GA.cpp Player.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
 EXECUTABLE=GA
