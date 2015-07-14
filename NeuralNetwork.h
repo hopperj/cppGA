@@ -22,26 +22,26 @@ public:
 
 
   //int numOfInputs, numOfHidden, numOfOutputs, numOfHiddenLayers;
-  vector<double> inputs;
-  vector< vector<double> > hidden;
-  vector<double> outputs;
+  vector<float> inputs;
+  vector< vector<float> > hidden;
+  vector<float> outputs;
 
-  vector< vector<double> > ihw;
-  vector< vector< vector<double> > > hhw;
-  vector< vector<double> > how;
+  vector< vector<float> > ihw;
+  vector< vector< vector<float> > > hhw;
+  vector< vector<float> > how;
 
   int useThreshold;
-  double energyThreshold;
-  double mutationChance = 0.05;
-  double mutationStrength = 0.05;
+  float energyThreshold;
+  float mutationChance = 0.05;
+  float mutationStrength = 0.05;
 
   void Init( int ins, int hidd, int nohl, int outs );
 
-  int setIHW( vector< vector<double> > nihw );
-  int setHOW( vector< vector<double> > nhow );
+  int setIHW( vector< vector<float> > nihw );
+  int setHOW( vector< vector<float> > nhow );
 
-  vector< vector<double> > getIHW();
-  vector< vector<double> > getHOW();
+  vector< vector<float> > getIHW();
+  vector< vector<float> > getHOW();
 
 
   void customIHW();
@@ -53,17 +53,19 @@ public:
 
   void PertibateBrain();
 
-  int save();
-  int load();
+  //int save();
+  //int load();
+  int save(int id);
+  int load(int id);
 
-  vector< double > run( vector< double> inpt );
-  vector< double > run( double *inpt);
+  vector< float > run( vector< float> inpt );
+  vector< float > run( float *inpt);
 
 private:
-  double sigmoid(double x);
-  double dsigmoid(double x);
+  float sigmoid(float x);
+  float dsigmoid(float x);
 
-  vector< vector<double> > Random2DList( int n, int m);
+  vector< vector<float> > Random2DList( int n, int m);
 
   void RandomIHW();
   void RandomHOW();
@@ -71,7 +73,7 @@ private:
 
   void resetNodes();
 
-  void print2DVector( vector< vector<double> > a2d);
+  void print2DVector( vector< vector<float> > a2d);
 
   void feedForward();
 };

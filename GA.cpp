@@ -7,13 +7,10 @@
 #include <vector>
 #include <algorithm>
 
-/*
-#include <boost/thread/thread.hpp>
-#include <boost/thread/mutex.hpp>
-#include <boost/bind.hpp>
-*/
-//#include <boost/thread.hpp>
-//#include <boost/thread/mutex.hpp>
+#include <chrono>
+#include <ctime>
+
+
 #include <thread>
 #include "GA.h"
 #include <mutex>
@@ -28,13 +25,13 @@ GA::GA(){
   srand(time(NULL));
 
   population = vector<Player>(NUMOFPLAYERS);
-  scores = vector< vector<double> >(NUMOFPLAYERS);
+  scores = vector< vector<float> >(NUMOFPLAYERS);
   playerId = 0;
   oppId = 0;
   GenPopulation();
 }
 
-int GA::indexOf( vector<double>& v, double element ) {
+int GA::indexOf( vector<float>& v, float element ) {
   for( unsigned int i=0; i<v.size(); i++){
     if( v[i]==element ){
       return i;
@@ -49,9 +46,9 @@ int GA::indexOf( vector<double>& v, double element ) {
 }
 
 void GA::SortPopulation(){
-  double averageFitness = 0.0;
-  fitness = vector< double >(NUMOFPLAYERS, -99.0);
-  sortedFitness = vector< double >(NUMOFPLAYERS, -99.0);
+  float averageFitness = 0.0;
+  fitness = vector< float >(NUMOFPLAYERS, -99.0);
+  sortedFitness = vector< float >(NUMOFPLAYERS, -99.0);
   newPopulation = vector< Player >(NUMOFPLAYERS);
 
   for( int p=0; p<NUMOFPLAYERS; p++){
@@ -102,6 +99,7 @@ void GA::Breed(){
     population[i] = Player(playerId++);
     i++;
   }
+  //population[0].LoadBrain();
   //cout << "Doing breeding" << endl;
   while( i < NUMOFPLAYERS ){
     for( int j=0; j<=NUMOFPLAYERS*breedFraction; j++){
@@ -122,29 +120,38 @@ void GA::GenPopulation(){
   for( int i=0; i<NUMOFPLAYERS; i++){
     population[i] = Player(playerId++);
   }
+
+  for( int i=0; i<int(NUMOFPLAYERS*0.1); i++){
+    if( population[i].LoadBrain(i) == 1 ){
+      cout << "Error loading brain " << i << endl;
+    }
+  }
+  population[0].brain.PrintIHW();
+  cout << "---------------------------------------------------------" << endl;
+  cout << "Done creating population" << endl;
 }
 
 void GA::RunSimulation(){
   Player allStar;
 
   vector<Player> opponent = vector< Player >(TESTINGPOOLSIZE);
-
+  cout << "Creating opponent pool" << endl;
   for( int i=0; i<TESTINGPOOLSIZE; i++){
     opponent[i] = Player(oppId++);
     opponent[i].SetMark('o');
   }
-
+  cout << "Created opponents" << endl;
   // thread_ = thread( &clientTCP::run , this, f );
   vector< thread > threads = vector< thread >(numOfThreads);
   int start,end;
 
-
-  clock_t t0 = clock();
+  chrono::time_point<chrono::system_clock> t0;
+  chrono::duration<double> elapsed_seconds;
+  cout << "Beginning simulation." << endl;
   for( int generation=0; generation<(int)(NUMOFGENERATIONS*0.25); generation++){
+
     cout << "Generation: " << generation << endl;
-
-
-    t0 = clock();
+    t0 = chrono::system_clock::now();
     for( int i=0; i<numOfThreads; i++){
       start = i*(int)((float)NUMOFPLAYERS/(float)numOfThreads);
       end = start + (int)((float)NUMOFPLAYERS/(float)numOfThreads);
@@ -170,7 +177,8 @@ void GA::RunSimulation(){
     }
     
     //break;
-    cout << "Time taken: " << float( clock () - t0 ) /  ( CLOCKS_PER_SEC*TESTINGPOOLSIZE )<< " sec" << endl;
+    elapsed_seconds = chrono::system_clock::now() - t0;
+    cout << "Time taken: " << elapsed_seconds.count() << " sec" << endl;
     //PlayTournament(0, NUMOFPLAYERS);
     SortPopulation();
     for( int i=0; i<TESTINGPOOLSIZE; i++){
@@ -187,7 +195,16 @@ void GA::RunSimulation(){
 
   for( int generation=0; generation<NUMOFGENERATIONS; generation++){
     cout << "Generation: " << generation << endl;
-    t0 = clock();
+
+    if(generation>0 && generation%((int)(NUMOFGENERATIONS*0.1))==0){
+      cout << "Preserving the top minds of this generation" << endl;
+      SortPopulation();
+      for( int i=0; i<(int)(NUMOFPLAYERS*0.1); i++ ){
+        population[i].SaveBrain(i);
+      }
+    }
+
+    t0 = chrono::system_clock::now();
     for( int i=0; i<numOfThreads; i++){
       start = i*(int)((float)NUMOFPLAYERS/(float)numOfThreads);
       end = start + (int)((float)NUMOFPLAYERS/(float)numOfThreads);
@@ -215,9 +232,14 @@ void GA::RunSimulation(){
     }
 
     SortPopulation();
-
-    for( int i=0; i<TESTINGPOOLSIZE; i++){
+    
+    for( int i=0; i<(int)(TESTINGPOOLSIZE*0.5); i++){
+      opponent[i] = Player(oppId++);
+      opponent[i].SetMark('o');
+    }
+    for( int i=(int)(TESTINGPOOLSIZE*0.5); i<TESTINGPOOLSIZE; i++){
       opponent[i] = population[ (rand()/float(RAND_MAX))*(NUMOFPLAYERS-1) ];
+      opponent[i].SetMark('o');
     }
 
     if( generation<NUMOFGENERATIONS-1 ){
@@ -225,13 +247,17 @@ void GA::RunSimulation(){
     }
 
   }
-  population[0].brain.save();
 
   allStar = population[0];
   GenPopulation();
   population[0] = allStar;
   PlayTournament(0, NUMOFPLAYERS, opponent);
   cout << "All star fitness: " << population[0].Fitness()/(float)TESTINGPOOLSIZE << endl;
+
+
+  for( unsigned int i=0; i<(NUMOFPLAYERS*0.1); i++ ){
+    population[i].SaveBrain(i);
+  }
 
   //PlayHumanTournament(&allStar);
 }
@@ -278,9 +304,12 @@ void GA::PlayTournament(int startNum, int endNum, vector< Player > opponent){
 }
 
 void GA::Resume(){
+  cout << "Resuming......" << endl;
 
-  Player allStar = Player();
-  allStar.LoadBrain();
+  Player allStar = Player(0);
+  cout << "Loading breain" << endl;
+  allStar.LoadBrain(0);
+  
   PlayHumanTournament( &allStar);
 
 }
@@ -300,7 +329,7 @@ void GA::PlayHumanGame(Player *p1){
         game.printBoard();
         if( turnNum % 2 == 0){
           if( p1->TakeTurn( &game ) ){
-            cout << "-->p1 wins" << endl;
+            cout << "-->P1 wins" << endl;
             wasWinner = true;
             break;
           }
@@ -325,6 +354,7 @@ void GA::PlayHumanGame(Player *p1){
           }
           wasWinner = game.checkWinner();
           if( wasWinner ){
+            cout << "-->P2 wins!" << endl;
             break;
           }
         }
@@ -386,11 +416,20 @@ void GA::PlayGame(Player *p1, Player *p2, TTT *game, int playerNum){
 
 
 
-int main(){
+int main(int argc, char* argv[]){
 
   GA ga = GA();
 
-  ga.RunSimulation();
-  //ga.Resume();
+  if( argc>1 ){
+    int mode = atoi(argv[1]);
+    cout << argv[0] << " " << mode << endl;
+    if( mode==0){
+      cout << "Running simulation" << endl;
+      ga.RunSimulation();
+    } else {
+      cout << "Playing game" << endl;
+      ga.Resume();
+    }
+  }  
   return 1;
 }

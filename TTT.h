@@ -26,8 +26,10 @@ public:
   map<char, int> playerMap;
   TTT();
 
+  unsigned int turnNum;
+
   void clearBoard();
-  void getBoardLinear( double *outpt );
+  void getBoardLinear( float *outpt );
   int unitTest();
 
   int isValidMove(int x, int y);

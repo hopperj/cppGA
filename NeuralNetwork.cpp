@@ -30,101 +30,83 @@ void NeuralNetwork::Init( int ins, int hidd, int nohl, int outs ){
   RandomHOW();
 }
 
-int NeuralNetwork::save() {
-  ofstream fout("nn.dat");
-  if( fout.is_open() ) {
-    fout << NUMOFINPUTS << "\t" << NUMOFHIDDEN << "\t" << NUMOFHIDDENLAYERS << "\t" << NUMOFOUTPUTS << "\n\n";
+int NeuralNetwork::save(int id) {
+  try{
+    string filename = "brains/nn_"+std::to_string(id)+".dat";
+    ofstream fout(filename);
+    if( fout.is_open() ) {
+      fout << NUMOFINPUTS << "\t" << NUMOFHIDDEN << "\t" << NUMOFHIDDENLAYERS << "\t" << NUMOFOUTPUTS << "\n\n";
 
-    for( int i=0; i<NUMOFINPUTS; i++) {
-      for( int j=0; j<NUMOFHIDDEN; j++) {
-      	fout << ihw[i][j] << "\t";
+      for( int i=0; i<NUMOFINPUTS; i++) {
+        for( int j=0; j<NUMOFHIDDEN; j++) {
+          fout << ihw[i][j] << "\t";
+        }
       }
-    }
-    fout << "\n\n";
+      fout << "\n\n";
 
-    for( int hl=0; hl<NUMOFHIDDENLAYERS; hl++){
-      for( int h1=0; h1<NUMOFHIDDEN; h1++){
-        for( int h2=0; h2<NUMOFHIDDEN; h2++){
-          fout << hhw[hl][h1][h2] << "\t";
+      for( int hl=0; hl<NUMOFHIDDENLAYERS; hl++){
+        for( int h1=0; h1<NUMOFHIDDEN; h1++){
+          for( int h2=0; h2<NUMOFHIDDEN; h2++){
+            fout << hhw[hl][h1][h2] << "\t";
+          }
+        }
+      }
+      fout << "\n\n";
+
+      for( int i=0; i<NUMOFHIDDEN; i++) {
+        for( int j=0; j<NUMOFOUTPUTS; j++){
+          fout << how[i][j] << "\t";
         }
       }
     }
-    fout << "\n\n";
-
-    for( int i=0; i<NUMOFHIDDEN; i++) {
-      for( int j=0; j<NUMOFOUTPUTS; j++){
-      	fout << how[i][j] << "\t";
-      }
-    }
+  } catch( const std::exception& e ){
+    cout << "Error id: " << id << endl;
+    return 1;
   }
   return 0;
 }
 
-int NeuralNetwork::load(){
-  ifstream fin("nn.dat");
-  if( fin.is_open() ) {
-    fin >> NUMOFINPUTS >> NUMOFHIDDEN >> NUMOFHIDDENLAYERS >> NUMOFOUTPUTS;
-    RandomIHW();
-    RandomHHW();
-    RandomHOW();
+int NeuralNetwork::load(int id){
+  try{
+    string filename = "brains/nn_"+std::to_string(id)+".dat";
+    ifstream fin(filename);
+    if( fin.is_open() ) {
+      fin >> NUMOFINPUTS >> NUMOFHIDDEN >> NUMOFHIDDENLAYERS >> NUMOFOUTPUTS;
+      RandomIHW();
+      RandomHHW();
+      RandomHOW();
     
-    for( int i=0; i<NUMOFINPUTS; i++) {
-      for( int j=0; j<NUMOFHIDDEN; j++) {
-      	fin >> ihw[i][j];
-        //cout << ihw[i][j] << " ";
-      }
-      //cout << endl;
-    }
-
-
-
-    for( int hl=0; hl<NUMOFHIDDENLAYERS; hl++){
-      for( int h1=0; h1<NUMOFHIDDEN; h1++){
-        for( int h2=0; h2<NUMOFHIDDEN; h2++){
-          fin >> hhw[hl][h1][h2];
+      for( int i=0; i<NUMOFINPUTS; i++) {
+        for( int j=0; j<NUMOFHIDDEN; j++) {
+          fin >> ihw[i][j];
         }
       }
-    }
-
-    for( int i=0; i<NUMOFHIDDEN; i++) {
-      for( int j=0; j<NUMOFOUTPUTS; j++){
-      	fin >> how[i][j];
-      }
-    }
-
-
-  }
 
 
 
-  return 0;
-  /*
-  
-    for( int i=0; i<NUMOFINPUTS; i++) {
-      for( int j=0; j<NUMOFHIDDEN; j++) {
-      	fout << ihw[i][j] << "\t";
-      }
-    }
-    fout << "\n\n";
-
-    for( int hl=0; hl<NUMOFHIDDENLAYERS; hl++){
-      for( int h1=0; h1<NUMOFHIDDEN; h1++){
-        for( int h2=0; h2<NUMOFHIDDEN; h2++){
-          fout << hhw[hl][h1][h2] << "\t";
+      for( int hl=0; hl<NUMOFHIDDENLAYERS; hl++){
+        for( int h1=0; h1<NUMOFHIDDEN; h1++){
+          for( int h2=0; h2<NUMOFHIDDEN; h2++){
+            fin >> hhw[hl][h1][h2];
+          }
         }
       }
-    }
-    fout << "\n\n";
 
-    for( int i=0; i<NUMOFHIDDEN; i++) {
-      for( int j=0; j<NUMOFOUTPUTS; j++){
-      	fout << how[i][j] << "\t";
+      for( int i=0; i<NUMOFHIDDEN; i++) {
+        for( int j=0; j<NUMOFOUTPUTS; j++){
+          fin >> how[i][j];
+        }
       }
+    } else {
+      cout << "File did not exist for id: " << id << endl;
+      return 1;
     }
+    cout << "Loaded brain: " << id << endl;
+  } catch( const std::exception& e ){
+    cout << "ERROR id: " << id << endl;
+    return 1;
   }
   return 0;
-
-*/
 }
 
 
@@ -173,11 +155,11 @@ void NeuralNetwork::PertibateBrain(){
 }
 
 
-vector< vector<double> > NeuralNetwork::Random2DList( int n, int m){
-  vector< vector<double> > tmp = vector< vector<double> >(n);
+vector< vector<float> > NeuralNetwork::Random2DList( int n, int m){
+  vector< vector<float> > tmp = vector< vector<float> >(n);
   //cout << "n: " << n << " m: " << m << endl;
   for( int i=0; i<n; i++){
-    vector<double> v(m,0.0);
+    vector<float> v(m,0.0);
     for( int j=0; j<m; j++ ){
       // Generate number [-0.5, 0.5)
       v[j] = rand()/float(RAND_MAX) - 0.5;
@@ -190,13 +172,13 @@ vector< vector<double> > NeuralNetwork::Random2DList( int n, int m){
 
 
 void NeuralNetwork::RandomHHW(){
-  hhw = vector< vector< vector<double> > >(NUMOFHIDDENLAYERS);
+  hhw = vector< vector< vector<float> > >(NUMOFHIDDENLAYERS);
   for( int i=0; i<NUMOFHIDDENLAYERS; i++){
     hhw[i] = Random2DList( NUMOFHIDDEN, NUMOFHIDDEN );
   }
 }
 
-void NeuralNetwork::print2DVector(vector< vector<double> > a2d){
+void NeuralNetwork::print2DVector(vector< vector<float> > a2d){
   for( unsigned int n=0; n<a2d.size(); n++){
     for( unsigned int m=0; m<a2d[n].size(); m++){
       cout << a2d[n][m] << " ";
@@ -225,7 +207,7 @@ void NeuralNetwork::PrintIHW(){
   }
 }
 
-vector< vector<double> > NeuralNetwork::getIHW(){
+vector< vector<float> > NeuralNetwork::getIHW(){
   return ihw;
 }
 
@@ -233,7 +215,7 @@ void NeuralNetwork::RandomHOW(){
   how = Random2DList(NUMOFHIDDEN, NUMOFOUTPUTS);
 }
 
-vector< vector<double> > NeuralNetwork::getHOW(){
+vector< vector<float> > NeuralNetwork::getHOW(){
   return how;
 }
 
@@ -250,25 +232,25 @@ void NeuralNetwork::PrintHOW(){
 }
 
 void NeuralNetwork::resetNodes(){
-  inputs = vector<double>(NUMOFINPUTS);
+  inputs = vector<float>(NUMOFINPUTS);
   // Set the bias node
   inputs[NUMOFINPUTS-1] = 1.0;
   hidden = Random2DList( NUMOFHIDDEN, NUMOFHIDDEN);
   for( int i=0; i<NUMOFHIDDEN; i++){
     hidden[i][ NUMOFHIDDEN-1 ] = 1.0;
   }
-  outputs = vector<double>(NUMOFOUTPUTS);
+  outputs = vector<float>(NUMOFOUTPUTS);
 }
 
-double NeuralNetwork::sigmoid(double x){
+float NeuralNetwork::sigmoid(float x){
   return 1.0/(1.0+exp(-1.0*x));
 }
 
-double NeuralNetwork::dsigmoid(double x){
+float NeuralNetwork::dsigmoid(float x){
   return x*( 1.0 - x );
 }
 
-vector< double > NeuralNetwork::run( double *inpt){
+vector< float > NeuralNetwork::run( float *inpt){
   resetNodes();
   for( int i=0; i<NUMOFINPUTS-1; i++ ){
     inputs[i] = inpt[i];
@@ -278,7 +260,7 @@ vector< double > NeuralNetwork::run( double *inpt){
 
   feedForward();
   if (useThreshold == 1){
-    vector< double > result;
+    vector< float > result;
     for( int o=0; o<NUMOFOUTPUTS; o++ ){
       // z = (x > y) ? z : y;
       result[o] = ( outputs[o] > energyThreshold ) ? 1.0 : 0.0;
@@ -291,7 +273,7 @@ vector< double > NeuralNetwork::run( double *inpt){
 
 void NeuralNetwork::feedForward(){
   for( int i=0; i<NUMOFINPUTS; i++){
-    for( int h=0; h<NUMOFHIDDEN; h++){
+    for( register int h=0; h<NUMOFHIDDEN; h++){
       hidden[0][h] += inputs[i]*ihw[i][h];
     }
   }
@@ -303,7 +285,7 @@ void NeuralNetwork::feedForward(){
   for( int hl=1; hl<NUMOFHIDDENLAYERS; hl++){
 
     for( int h1=0; h1<NUMOFHIDDEN; h1++){
-      for( int h2=0; h2<NUMOFHIDDEN; h2++){
+      for( int register h2=0; h2<NUMOFHIDDEN; h2++){
         hidden[ hl ][h1] += hidden[hl-1][ h2 ]*hhw[hl][h1][h2];
       }
       hidden[ hl ][ h1 ] = sigmoid(hidden[hl][h1]);
@@ -312,13 +294,13 @@ void NeuralNetwork::feedForward(){
 
   // Sum energies for output nodes
   for( int o=0; o<NUMOFOUTPUTS; o++ ){
-    for( int h=0; h<NUMOFHIDDEN; h++){
+    for( int register h=0; h<NUMOFHIDDEN; h++){
       outputs[o] += hidden[NUMOFHIDDENLAYERS-1][h]*how[h][o];
     }
     outputs[o] = sigmoid( outputs[o] );
   }
 
-  //vector<double> threshOuts(NUMOFOUTPUTS, 0.0);
+  //vector<float> threshOuts(NUMOFOUTPUTS, 0.0);
 
 
 
@@ -329,7 +311,7 @@ void NeuralNetwork::feedForward(){
 void NeuralNetwork::customIHW(){
 
   for( int i=0; i<NUMOFINPUTS; i++ ){
-    vector<double> v {0.0,1.0,2.0};
+    vector<float> v {0.0,1.0,2.0};
     ihw[i] = v;
   }
 
@@ -341,7 +323,7 @@ void NeuralNetwork::customIHW(){
 void NeuralNetwork::customHOW(){
 
   for( int i=0; i<NUMOFHIDDEN; i++ ){
-    vector<double> v {0.0,1.0,2.0};
+    vector<float> v {0.0,1.0,2.0};
     how[i] = v;
   }
 
@@ -352,7 +334,7 @@ void NeuralNetwork::customHOW(){
 
 }
 
-void print1DVector( vector<double> x){
+void print1DVector( vector<float> x){
   //cout << "vector size=" << x.size() << endl;
   for( unsigned int i=0; i<x.size(); i++){
     cout << x[i];
@@ -363,7 +345,7 @@ void print1DVector( vector<double> x){
   cout << endl;
 }
 
-void print2DVector( vector< vector<double> > x){
+void print2DVector( vector< vector<float> > x){
   //cout << "printing 2D vector" << endl;
   for( unsigned int i=0; i<x.size(); i++){
     for( unsigned int j=0; j<x[i].size(); j++) {
@@ -387,17 +369,17 @@ int main(){
   nn.customIHW();
   nn.customHOW();
 
-  vector< vector<double>> xorstate;
+  vector< vector<float>> xorstate;
   xorstate.push_back( {0,1} );
   xorstate.push_back ({1,1} );
   xorstate.push_back( {1,0} );
   xorstate.push_back( {0,0} );
 
 
-  vector<double> expect {1,0,1,0};
+  vector<float> expect {1,0,1,0};
 
   for( int i=0; i<xorstate.size(); i++){
-    vector<double> tmp = nn.run( xorstate[i] );
+    vector<float> tmp = nn.run( xorstate[i] );
     cout << "\nInput:" << endl;
     print1DVector(xorstate[i]);
     cout << "Result:";

@@ -23,9 +23,9 @@ public:
 
   int Id;
   char mark;
-  double wins, ties, losses;
-  vector<double> moves;
-  vector<double> sorted;
+  float wins, ties, losses;
+  vector<float> moves;
+  vector<float> sorted;
 
   int potentialMove;
 
@@ -35,11 +35,12 @@ public:
 
   int TakeTurn( TTT *game );
   int TakeTurn( TTT *game, mutex *m );
-  inline int indexOf( vector<double>& v, double element );
+  inline int indexOf( vector<float>& v, float element );
   void SetMark( char _mark );
-  double Fitness();
-  double MaxFitness();
+  float Fitness();
+  float MaxFitness();
   void ClearScore();
   int GetId();
-  void LoadBrain();
+  int LoadBrain(int id);
+  int SaveBrain(int id);
 };

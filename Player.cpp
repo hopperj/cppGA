@@ -1,7 +1,6 @@
 #include "Player.h"
 #include <algorithm>
 #include <iostream>
-<<<<<<< HEAD
 #include <mutex>
 //#include <boost/thread.hpp>
 //#include <boost/thread/mutex.hpp>
@@ -53,7 +52,7 @@ void Player::ClearScore(){
   losses = 0.0;
 }
 
-double Player::Fitness(){
+float Player::Fitness(){
   if(wins+ties+losses == 0 ){
     return 0.0;
   }
@@ -62,7 +61,7 @@ double Player::Fitness(){
   return (5.0*wins + 4.0*ties - 10.0*losses)/(float)(wins+ties+losses);
 }
 
-double Player::MaxFitness(){
+float Player::MaxFitness(){
   return 1.0;
   return 5.0;
 }
@@ -76,7 +75,7 @@ int Player::TakeTurn( TTT *game ){
   const int numOfInputs = 9;
 
   //cout << "doing stuff" << endl;
-  double tmp[numOfInputs] = {0.0};
+  float tmp[numOfInputs] = {0.0};
   game->getBoardLinear( tmp );
   /*
   for( int i=0; i<numOfInputs; i++){
@@ -89,13 +88,13 @@ int Player::TakeTurn( TTT *game ){
 
   sorted = moves;
 
-  sort( sorted.begin(), sorted.end(), greater<double>() );
+  sort( sorted.begin(), sorted.end(), greater<float>() );
   if( sorted[0] < sorted[moves.size()-1]){
     cout << "WHAT THE FUCK" << endl;
   }
   //reverse( sorted.begin(), sorted.end() );
 
-  for( int i=0; i<sorted.size(); i++ ){
+  for( unsigned int i=0; i<sorted.size(); i++ ){
 
     potentialMove = indexOf( moves, sorted[i] );
     if(!game->move( potentialMove/3, potentialMove%3, mark )){
@@ -108,7 +107,7 @@ int Player::TakeTurn( TTT *game ){
 
 }
 
-inline int Player::indexOf( vector<double>& v, double element ) {
+inline int Player::indexOf( vector<float>& v, float element ) {
   for( unsigned int i=0; i<v.size(); i++){
     if( v[i]==element ){
       return i;
@@ -122,6 +121,9 @@ inline int Player::indexOf( vector<double>& v, double element ) {
   return -1;
 }
 
-void Player::LoadBrain(){
-  brain.load();
+int Player::SaveBrain(int id){
+  return brain.save(id);
+}
+int Player::LoadBrain(int id){
+  return brain.load(id);
 }

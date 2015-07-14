@@ -17,6 +17,7 @@ TTT::TTT(){
 
 void TTT::clearBoard(){
 
+  turnNum = 0;
   for( int i=0; i<N; i++ ) {
     for( int j=0; j<M; j++ ) {
       board[i][j] = 0;
@@ -66,13 +67,13 @@ int TTT::move(int x, int y, char playerToken ){
   return 1;
 }
 
-void TTT::getBoardLinear( double *outpt ){
+void TTT::getBoardLinear( float *outpt ){
   //cout << "\n" << endl;
-  vector<double> line = vector<double>(N*M,0.0);
+  vector<float> line = vector<float>(N*M,0.0);
   for( int i=0; i<N; i++){
     for( int j=0; j<M; j++ ){
-      //line[i+j] = (double)board[i][j];
-      *outpt = (double)board[i][j];
+      //line[i+j] = (float)board[i][j];
+      *outpt = (float)board[i][j];
       //cout << line[i+j] << "\t";
       //cout << *outpt << "\t";
       outpt++;
@@ -81,6 +82,10 @@ void TTT::getBoardLinear( double *outpt ){
 }
 
 int TTT::checkWinner(){
+
+  if( turnNum < 5 ){
+    return 0;
+  }
 
   int sum=0;
 

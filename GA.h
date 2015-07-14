@@ -1,7 +1,7 @@
 
 #define NUMOFPLAYERS 1000
 #define TESTINGPOOLSIZE 100
-#define NUMOFGENERATIONS 1
+#define NUMOFGENERATIONS 150
 
 
 #include <stdio.h>
@@ -38,6 +38,9 @@ class GA
 
 public:
 
+  int numOfThreads = 2;
+
+
   GA();
   void PlayGame(Player *p1, Player *p2, TTT *game, int playerNum);
   void PlayHumanGame(Player *p1);
@@ -48,17 +51,16 @@ public:
   void Resume();
 
   void RunSimulation();
-  int indexOf( vector<double>& v, double element );
+  int indexOf( vector<float>& v, float element );
   void SortPopulation();
   void Breed();
   void GenPopulation();
 
 
-  double breedFraction = 0.25;
-  double killFraction = 0.25;
+  float breedFraction = 0.25;
+  float killFraction = 0.25;
   bool perfectScore = false;
 
-  int numOfThreads = 2;
 
 
   int playerId;
@@ -66,11 +68,11 @@ public:
   //Player population[ NUMOFPLAYERS ];
   vector<Player> population;
 
-  vector< vector<double> > scores;
+  vector< vector<float> > scores;
 
 
-  vector< double > fitness;
-  vector< double > sortedFitness;
+  vector< float > fitness;
+  vector< float > sortedFitness;
   vector< Player > newPopulation;
   //Player newPopulation[ NUMOFPLAYERS ];
 
