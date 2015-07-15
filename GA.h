@@ -38,7 +38,7 @@ class GA
 
 public:
 
-  int numOfThreads = 2;
+  int numOfThreads = 1;
 
 
   GA();
@@ -60,7 +60,7 @@ public:
   float breedFraction = 0.25;
   float killFraction = 0.25;
   bool perfectScore = false;
-
+  float averageFitness;
 
 
   int playerId;

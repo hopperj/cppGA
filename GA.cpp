@@ -46,7 +46,7 @@ int GA::indexOf( vector<float>& v, float element ) {
 }
 
 void GA::SortPopulation(){
-  float averageFitness = 0.0;
+  averageFitness = 0.0;
   fitness = vector< float >(NUMOFPLAYERS, -99.0);
   sortedFitness = vector< float >(NUMOFPLAYERS, -99.0);
   newPopulation = vector< Player >(NUMOFPLAYERS);
@@ -121,9 +121,10 @@ void GA::GenPopulation(){
     population[i] = Player(playerId++);
   }
 
-  for( int i=0; i<int(NUMOFPLAYERS*0.1); i++){
+  for( int i=0; i<NUMOFPLAYERS; i++){
     if( population[i].LoadBrain(NUMOFGENERATIONS, i) == 1 ){
       cout << "Error loading brain " << i << endl;
+      break;
     }
   }
   population[0].brain.PrintIHW();
@@ -148,7 +149,7 @@ void GA::RunSimulation(){
   chrono::time_point<chrono::system_clock> t0;
   chrono::duration<double> elapsed_seconds;
   cout << "Beginning simulation." << endl;
-  for( int generation=0; generation<(int)(NUMOFGENERATIONS*0.25); generation++){
+  for( int generation=0; generation<NUMOFGENERATIONS; generation++){
 
     cout << "Generation: " << generation << endl;
     t0 = chrono::system_clock::now();
@@ -181,11 +182,21 @@ void GA::RunSimulation(){
     cout << "Time taken: " << elapsed_seconds.count() << " sec" << endl;
     //PlayTournament(0, NUMOFPLAYERS);
     SortPopulation();
-    for( int i=0; i<TESTINGPOOLSIZE; i++){
-      opponent[i] = Player(oppId++);
-      opponent[i].SetMark('o');
-    }
     Breed();
+
+    if( averageFitness > 0.9 ){
+      cout << "Population average is high enough to move on." << endl;
+      break;
+    }
+    if( averageFitness > 0.6 ){
+      cout << "Generating new opponents to be crushed!!" << endl;
+      for( int i=0; i<TESTINGPOOLSIZE; i++){
+	opponent[i] = Player(oppId++);
+	opponent[i].SetMark('o');
+      }
+    }
+
+
   }
 
   //return;
@@ -199,7 +210,7 @@ void GA::RunSimulation(){
     if(generation>0 && generation%(1+(int)(NUMOFGENERATIONS*0.1))==0){
       cout << "Preserving the top minds of this generation" << endl;
       SortPopulation();
-      for( int i=0; i<(int)(NUMOFPLAYERS*0.1); i++ ){
+      for( int i=0; i<(int)(NUMOFPLAYERS*breedFraction); i++ ){
         newPopulation[i].SaveBrain(generation,i);
       }
     }
@@ -233,18 +244,22 @@ void GA::RunSimulation(){
 
     SortPopulation();
     
-    for( int i=0; i<(int)(TESTINGPOOLSIZE*0.5); i++){
-      opponent[i] = Player(oppId++);
-      opponent[i].SetMark('o');
-    }
-    for( int i=(int)(TESTINGPOOLSIZE*0.5); i<TESTINGPOOLSIZE; i++){
-      opponent[i] = population[ (rand()/float(RAND_MAX))*(NUMOFPLAYERS-1) ];
-      opponent[i].SetMark('o');
-    }
-
     if( generation<NUMOFGENERATIONS-1 ){
       Breed();
     }
+    if( averageFitness > 0.6 ) {
+      cout << "Opponents are too easy .... getting new ones!" << endl;
+
+      for( int i=0; i<(int)(TESTINGPOOLSIZE*0.5); i++){
+	opponent[i] = Player(oppId++);
+	opponent[i].SetMark('o');
+      }
+      for( int i=(int)(TESTINGPOOLSIZE*0.5); i<TESTINGPOOLSIZE; i++){
+	opponent[i] = population[ (rand()/float(RAND_MAX))*(NUMOFPLAYERS-1) ];
+	opponent[i].SetMark('o');
+      }
+    }
+
 
   }
   /*
@@ -257,7 +272,7 @@ void GA::RunSimulation(){
   cout << "All star fitness: " << population[0].Fitness()/(float)TESTINGPOOLSIZE << endl;
   */
   SortPopulation();
-  for( unsigned int i=0; i<(NUMOFPLAYERS*0.1); i++ ){
+  for( unsigned int i=0; i<(NUMOFPLAYERS*breedFraction); i++ ){
     newPopulation[i].SaveBrain(NUMOFGENERATIONS,i);
   }
 
