@@ -84,7 +84,7 @@ void TTT::getBoardLinear( float *outpt ){
 
 int TTT::checkWinner(){
 
-  if( turnNum < 5 ){
+  if( turnNum < 4 ){
     return 0;
   }
 

@@ -67,7 +67,7 @@ void GA::SortPopulation(){
 
   reverse( newPopulation.begin(), newPopulation.end() );
 
-  cout << "Max Fitness: " << newPopulation[0].Fitness()/(float)TESTINGPOOLSIZE << endl;
+  cout << "Max Fitness: " << newPopulation[0].Id << " " <<newPopulation[0].Fitness()/(float)TESTINGPOOLSIZE << endl;
   cout << "Average Fitness: " << averageFitness << endl << endl;
   //cout << newPopulation[0].wins << " " << newPopulation[0].ties << " " << newPopulation[0].losses << endl;
   //cout << NUMOFPLAYERS-1 << " " << newPopulation[NUMOFPLAYERS-1].Fitness() << endl;
@@ -200,7 +200,7 @@ void GA::RunSimulation(){
       cout << "Preserving the top minds of this generation" << endl;
       SortPopulation();
       for( int i=0; i<(int)(NUMOFPLAYERS*0.1); i++ ){
-        population[i].SaveBrain(generation,i);
+        newPopulation[i].SaveBrain(generation,i);
       }
     }
 
@@ -247,16 +247,18 @@ void GA::RunSimulation(){
     }
 
   }
+  /*
+  SortPopulation();
 
   allStar = population[0];
-  GenPopulation();
+  //GenPopulation();
   population[0] = allStar;
   PlayTournament(0, NUMOFPLAYERS, opponent);
   cout << "All star fitness: " << population[0].Fitness()/(float)TESTINGPOOLSIZE << endl;
-
-
+  */
+  SortPopulation();
   for( unsigned int i=0; i<(NUMOFPLAYERS*0.1); i++ ){
-    population[i].SaveBrain(NUMOFGENERATIONS,i);
+    newPopulation[i].SaveBrain(NUMOFGENERATIONS,i);
   }
 
   //PlayHumanTournament(&allStar);
@@ -385,7 +387,7 @@ void GA::PlayGame(Player *p1, Player *p2, TTT *game, int playerNum){
         if( p1->TakeTurn( game ) ){
           //cout << "-->p1 wins" << endl;
           //p1->wins += 1.0;
-          p1->wins += 1.50 - (float)(turnNum-5)/4.0;
+          p1->wins += 1.50 - (float)(turnNum-4)/4.0;
           //p2->losses += 1.0;
           wasWinner = true;
           break;
@@ -395,7 +397,7 @@ void GA::PlayGame(Player *p1, Player *p2, TTT *game, int playerNum){
         if( p2->TakeTurn( game, &m[playerNum] ) ){
           //cout << "-->p2 wins" << endl;
           //p2->wins += 1.0;
-          p1-> wins -= 2.50 - (float)(turnNum-5)/4.0;
+          p1-> wins -= 2.50 - (float)(turnNum-4)/4.0;
           //p1->losses += 1.0;
           wasWinner = true;
           break;

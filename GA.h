@@ -38,7 +38,7 @@ class GA
 
 public:
 
-  int numOfThreads = 4;
+  int numOfThreads = 2;
 
 
   GA();
