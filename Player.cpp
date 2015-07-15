@@ -2,34 +2,14 @@
 #include <algorithm>
 #include <iostream>
 #include <mutex>
-//#include <boost/thread.hpp>
-//#include <boost/thread/mutex.hpp>
-/*
-#ifndef TT
-#include "TTT.h"
-#endif
-*/
-/*
-Player::Player( char _mark ){
-  brain.Init(18,18,18,9);
-  mark = _mark;
-
-  wins = 0.0;
-  ties = 0.0;
-  losses = 0.0;
-}
-*/
-
-//mutex m;
 
 
 using namespace std;
-//using namespace boost;
 
 Player::Player(){
 }
 Player::Player(int id){
-  brain.Init(9,9,9,9);
+  brain.Init(9,18,9,9);
 
   wins = 0.0;
   ties = 0.0;
@@ -121,9 +101,9 @@ inline int Player::indexOf( vector<float>& v, float element ) {
   return -1;
 }
 
-int Player::SaveBrain(int id){
-  return brain.save(id);
+int Player::SaveBrain(int gen, int id){
+  return brain.save(gen, id);
 }
-int Player::LoadBrain(int id){
-  return brain.load(id);
+int Player::LoadBrain(int gen, int id){
+  return brain.load(gen, id);
 }

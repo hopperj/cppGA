@@ -37,7 +37,7 @@ int GA::indexOf( vector<float>& v, float element ) {
       return i;
     }
   }
-  cout << "\n\nCouldn't find: "<<element<<endl;
+  cout << "\n\nCouldn't find: "<< element << endl;
   for( unsigned int i=0; i<v.size(); i++){
     cout << v[i] << " " << element << endl;
   }
@@ -122,7 +122,7 @@ void GA::GenPopulation(){
   }
 
   for( int i=0; i<int(NUMOFPLAYERS*0.1); i++){
-    if( population[i].LoadBrain(i) == 1 ){
+    if( population[i].LoadBrain(NUMOFGENERATIONS, i) == 1 ){
       cout << "Error loading brain " << i << endl;
     }
   }
@@ -196,11 +196,11 @@ void GA::RunSimulation(){
   for( int generation=0; generation<NUMOFGENERATIONS; generation++){
     cout << "Generation: " << generation << endl;
 
-    if(generation>0 && generation%((int)(NUMOFGENERATIONS*0.1))==0){
+    if(generation>0 && generation%(1+(int)(NUMOFGENERATIONS*0.1))==0){
       cout << "Preserving the top minds of this generation" << endl;
       SortPopulation();
       for( int i=0; i<(int)(NUMOFPLAYERS*0.1); i++ ){
-        population[i].SaveBrain(i);
+        population[i].SaveBrain(generation,i);
       }
     }
 
@@ -256,7 +256,7 @@ void GA::RunSimulation(){
 
 
   for( unsigned int i=0; i<(NUMOFPLAYERS*0.1); i++ ){
-    population[i].SaveBrain(i);
+    population[i].SaveBrain(NUMOFGENERATIONS,i);
   }
 
   //PlayHumanTournament(&allStar);
@@ -303,12 +303,15 @@ void GA::PlayTournament(int startNum, int endNum, vector< Player > opponent){
   //cout << "Time taken: " << float( clock () - t0 ) /  CLOCKS_PER_SEC << " sec" << endl;
 }
 
-void GA::Resume(){
+void GA::Resume(int gen, int p){
   cout << "Resuming......" << endl;
 
   Player allStar = Player(0);
-  cout << "Loading breain" << endl;
-  allStar.LoadBrain(0);
+  cout << "Loading brain" << endl;
+  allStar.LoadBrain(gen, p);
+  //allStar.LoadBrain(NUMOFGENERATIONS, 0);
+  
+  
   
   PlayHumanTournament( &allStar);
 
@@ -428,7 +431,11 @@ int main(int argc, char* argv[]){
       ga.RunSimulation();
     } else {
       cout << "Playing game" << endl;
-      ga.Resume();
+      if(argc>3){
+        ga.Resume(atoi(argv[2]), atoi(argv[3]));
+      } else {
+        ga.Resume(NUMOFGENERATIONS, 0);
+      }
     }
   }  
   return 1;

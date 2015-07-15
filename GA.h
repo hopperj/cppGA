@@ -38,7 +38,7 @@ class GA
 
 public:
 
-  int numOfThreads = 2;
+  int numOfThreads = 4;
 
 
   GA();
@@ -48,7 +48,7 @@ public:
 
   void PlayHumanTournament(Player *allStar);
 
-  void Resume();
+  void Resume(int gen, int p);
 
   void RunSimulation();
   int indexOf( vector<float>& v, float element );

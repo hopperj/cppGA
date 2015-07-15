@@ -62,6 +62,7 @@ int TTT::move(int x, int y, char playerToken ){
     //printBoard();
     //cout << "p" << playerMap[ playerToken ] << endl;
     //cout << x << " " << y << " set by " << playerToken << " " << board[x][y] << endl;
+    turnNum++;
     return 0;
   }
   return 1;

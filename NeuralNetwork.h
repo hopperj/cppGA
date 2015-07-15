@@ -55,8 +55,8 @@ public:
 
   //int save();
   //int load();
-  int save(int id);
-  int load(int id);
+  int save(int gen, int id);
+  int load(int gen, int id);
 
   vector< float > run( vector< float> inpt );
   vector< float > run( float *inpt);

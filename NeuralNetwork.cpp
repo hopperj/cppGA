@@ -30,9 +30,10 @@ void NeuralNetwork::Init( int ins, int hidd, int nohl, int outs ){
   RandomHOW();
 }
 
-int NeuralNetwork::save(int id) {
+int NeuralNetwork::save(int gen, int id) {
   try{
-    string filename = "brains/nn_"+std::to_string(id)+".dat";
+    char filename[255];
+    sprintf(filename, "brains/nn_%04d_%04d.dat",gen,id);
     ofstream fout(filename);
     if( fout.is_open() ) {
       fout << NUMOFINPUTS << "\t" << NUMOFHIDDEN << "\t" << NUMOFHIDDENLAYERS << "\t" << NUMOFOUTPUTS << "\n\n";
@@ -66,9 +67,10 @@ int NeuralNetwork::save(int id) {
   return 0;
 }
 
-int NeuralNetwork::load(int id){
+int NeuralNetwork::load(int gen, int id){
   try{
-    string filename = "brains/nn_"+std::to_string(id)+".dat";
+    char filename[255];
+    sprintf(filename, "brains/nn_%04d_%04d.dat",gen,id);
     ifstream fin(filename);
     if( fin.is_open() ) {
       fin >> NUMOFINPUTS >> NUMOFHIDDEN >> NUMOFHIDDENLAYERS >> NUMOFOUTPUTS;

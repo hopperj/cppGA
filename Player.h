@@ -41,6 +41,6 @@ public:
   float MaxFitness();
   void ClearScore();
   int GetId();
-  int LoadBrain(int id);
-  int SaveBrain(int id);
+  int LoadBrain(int gen, int id);
+  int SaveBrain(int gen, int id);
 };
