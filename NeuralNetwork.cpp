@@ -100,12 +100,12 @@ int NeuralNetwork::load(int gen, int id){
         }
       }
     } else {
-      cout << "File did not exist for id: " << id << endl;
+      //cout << "File did not exist for id: " << id << endl;
       return 1;
     }
-    cout << "Loaded brain: " << id << endl;
+    //cout << "Loaded brain: " << id << endl;
   } catch( const std::exception& e ){
-    cout << "ERROR id: " << id << endl;
+    //cout << "ERROR id: " << id << endl;
     return 1;
   }
   return 0;
@@ -129,9 +129,11 @@ void NeuralNetwork::PertibateBrain(){
 
     }
   }
+  //cout << "did IHW" << endl;
 
   for( int hl=0; hl<NUMOFHIDDENLAYERS; hl++){
     for( int h1=0; h1<NUMOFHIDDEN; h1++){
+      //cout << " **" << hl << " " << h1 << " " << hhw[hl][h1][0] << endl;
       for( int h2=0; h2<NUMOFHIDDEN; h2++){
         if( rand()/float(RAND_MAX) >= mutationChance ){
           hhw[hl][h1][h2] += mutationStrength*(rand()/float(RAND_MAX) - 0.5);
@@ -143,6 +145,7 @@ void NeuralNetwork::PertibateBrain(){
     }
   }
 
+  //cout << "did HHW" << endl;
   for( int h=0; h<NUMOFHIDDEN; h++ ){
     for( int o=0; o<NUMOFOUTPUTS; o++ ){
       if( rand()/float(RAND_MAX) >= mutationChance ){
@@ -153,7 +156,7 @@ void NeuralNetwork::PertibateBrain(){
       }
     }
   }
-
+  //cout << "did HOW" << endl;
 }
 
 

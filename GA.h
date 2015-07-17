@@ -1,7 +1,7 @@
 
 #define NUMOFPLAYERS 2000
 #define TESTINGPOOLSIZE 200
-#define NUMOFGENERATIONS 200
+#define NUMOFGENERATIONS 150
 
 
 #include <stdio.h>
@@ -38,7 +38,7 @@ class GA
 
 public:
 
-  int numOfThreads = 1;
+  int numOfThreads = 2;
 
 
   GA();
@@ -51,13 +51,13 @@ public:
   void Resume(int gen, int p);
 
   void RunSimulation();
-  int indexOf( vector<float>& v, float element );
+  vector<int> indexOf( vector<float>& v, float element );
   void SortPopulation();
   void Breed();
   void GenPopulation();
 
 
-  float breedFraction = 0.25;
+  float breedFraction = 0.15;
   float killFraction = 0.25;
   bool perfectScore = false;
   float averageFitness;
