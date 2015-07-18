@@ -32,6 +32,8 @@ public:
   void getBoardLinear( float *outpt );
   int unitTest();
 
+  vector< int > getEmptySpaces();
+  int getMarkValue( char m );
   int isValidMove(int x, int y);
   void printBoard();
   int move(int x, int y, char playerNum );

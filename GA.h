@@ -1,7 +1,7 @@
 
-#define NUMOFPLAYERS 2000
-#define TESTINGPOOLSIZE 200
-#define NUMOFGENERATIONS 150
+#define NUMOFPLAYERS 500
+#define TESTINGPOOLSIZE 50
+#define NUMOFGENERATIONS 100
 
 
 #include <stdio.h>
@@ -38,7 +38,7 @@ class GA
 
 public:
 
-  int numOfThreads = 2;
+  int numOfThreads = 1;
 
 
   GA();

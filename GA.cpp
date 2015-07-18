@@ -79,7 +79,7 @@ void GA::SortPopulation(){
     for( unsigned int j=0; j<pos.size(); j++ ){
       cout << "pos[j]: " <<pos[j] << endl;
       newPopulation[i] = population[ pos[j] ];
-      //cout << "i:" << i << "\tpos:" << pos[j] << "\tf:" << fitness[i] << "\tsf:" << sortedFitness[i] << "\tid:" << newPopulation[i].Id << endl;      
+      //cout << "i:" << i << "\tpos:" << pos[j] << "\tf:" << fitness[i] << "\tsf:" << sortedFitness[i] << "\tid:" << newPopulation[i].Id << endl;
       i++;
       if( i >= NUMOFPLAYERS ){
         break;
@@ -127,7 +127,7 @@ void GA::Breed(){
   //cout << "Doing breeding" << endl;
   while( i < NUMOFPLAYERS ){
     for( int j=0; j<=NUMOFPLAYERS*breedFraction; j++){
-      //cout << "-->" << i << " " << j << endl; 
+      //cout << "-->" << i << " " << j << endl;
       newP = newPopulation[j];
       //cout << "changing ID " << playerId << endl;
       newP.brain = newPopulation[j].brain;
@@ -215,7 +215,7 @@ void GA::RunSimulation(){
     for( int i=0; i<numOfThreads; i++){
         threads[i].join();
     }
-    
+
     //break;
     elapsed_seconds = chrono::system_clock::now() - t0;
     cout << "Time taken: " << elapsed_seconds.count() << " sec" << endl;
@@ -283,7 +283,7 @@ void GA::RunSimulation(){
     }
 
     SortPopulation();
-    
+
     if( generation<NUMOFGENERATIONS-1 ){
       Breed();
     }
@@ -335,11 +335,11 @@ void GA::PlayHumanTournament( Player *allStar){
 
 
 void GA::PlayTournament(int startNum, int endNum, vector< Player > opponent){
-  
+
   //outputMutex.lock();
   //cout << "from: " << startNum << " to: " << endNum << endl;
   //outputMutex.unlock();
-  
+
 
   TTT game = TTT();
 
@@ -367,9 +367,9 @@ void GA::Resume(int gen, int p){
   cout << "Loading brain" << endl;
   allStar.LoadBrain(gen, p);
   //allStar.LoadBrain(NUMOFGENERATIONS, 0);
-  
-  
-  
+
+
+
   PlayHumanTournament( &allStar);
 
 }
@@ -440,7 +440,7 @@ void GA::PlayGame(Player *p1, Player *p2, TTT *game, int playerNum){
       if( turnNum % 2 == 0){
         //cout << "P1" << endl;
         if( p1->TakeTurn( game ) ){
-          //cout << "-->p1 wins" << endl;
+          //cout << "p1 wins" << endl;
           //p1->wins += 1.0;
           p1->wins += 1.50 - (float)(turnNum-4)/4.0;
           //p2->losses += 1.0;
@@ -494,6 +494,6 @@ int main(int argc, char* argv[]){
         ga.Resume(NUMOFGENERATIONS, 0);
       }
     }
-  }  
+  }
   return 1;
 }

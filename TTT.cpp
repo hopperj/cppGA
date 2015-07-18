@@ -15,6 +15,10 @@ TTT::TTT(){
   playerMap = { {'x',-1}, {'o',1} };
 }
 
+int TTT::getMarkValue( char m ){
+  return playerMap[m];
+}
+
 void TTT::clearBoard(){
 
   turnNum = 0;
@@ -80,6 +84,19 @@ void TTT::getBoardLinear( float *outpt ){
       outpt++;
     }
   }
+}
+
+vector< int > TTT::getEmptySpaces(){
+  vector< int > empty = vector< int >();
+  
+  for( int i=0; i<N; i++ ){
+    for( int j=0; j<M; j++ ){
+      if( board[i][j] == 0){
+	empty.push_back(3*i+j);
+      }
+    }
+  }
+  return empty;
 }
 
 int TTT::checkWinner(){
