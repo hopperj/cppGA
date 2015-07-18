@@ -174,6 +174,10 @@ void GA::RunSimulation(){
 
   Player allStar;
 
+
+  float threshold = 1.0;
+
+
   vector<Player> opponent = vector< Player >(TESTINGPOOLSIZE);
   cout << "Creating opponent pool" << endl;
   for( int i=0; i<TESTINGPOOLSIZE; i++){
@@ -224,7 +228,8 @@ void GA::RunSimulation(){
     cout << "\n\n\nbreeding\n\n\n" << endl;
     Breed();
 
-    if( averageFitness > 0.9 ){
+    if( averageFitness > threshold ){
+      threshold += 0.1;
       cout << "Population average is high enough to move on." << endl;
       break;
     }
@@ -242,6 +247,7 @@ void GA::RunSimulation(){
   //return;
 
   cout << "\n\n*****Going into the REAL tournament!!*****\n\n";
+  threshold = 1.0;
 
 
   for( int generation=0; generation<NUMOFGENERATIONS; generation++){
@@ -287,7 +293,8 @@ void GA::RunSimulation(){
     if( generation<NUMOFGENERATIONS-1 ){
       Breed();
     }
-    if( averageFitness > 1.15 ) {
+    if( averageFitness > threshold ) {
+      threshold += 0.1;
       cout << "Opponents are too easy .... getting new ones!" << endl;
 
       for( int i=0; i<(int)(TESTINGPOOLSIZE*0.25); i++){
