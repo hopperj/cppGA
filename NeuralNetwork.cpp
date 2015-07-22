@@ -184,18 +184,21 @@ void NeuralNetwork::RandomHHW(){
 }
 
 void NeuralNetwork::print2DVector(vector< vector<float> > a2d){
+  //cout << a2d.size() << endl;
   for( unsigned int n=0; n<a2d.size(); n++){
+    //cout << "row: " << n << endl;
     for( unsigned int m=0; m<a2d[n].size(); m++){
-      cout << a2d[n][m] << " ";
+      //cout << a2d[n][m] << " ";
     }
-    cout << endl;
+    //cout << endl;
   }
 }
 
 void NeuralNetwork::PrintHHW(){
   for( int hl=0; hl<NUMOFHIDDENLAYERS; hl++){
+    //cout << "HL: " << hl << endl;
     print2DVector( hhw[hl] );
-    cout << "\n\n";
+    //cout << "\n\n";
   }
 }
 
