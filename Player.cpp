@@ -9,7 +9,7 @@ using namespace std;
 Player::Player(){
 }
 Player::Player(int id){
-  brain.Init(9,9,9,1);
+  brain.Init(9,9,9,9);
 
   wins = 0.0;
   ties = 0.0;
@@ -52,7 +52,7 @@ int Player::TakeTurn( TTT *game, mutex *m ){
   return ret;
 }
 
-
+/*
 int Player::TakeTurn( TTT *game ){
 
   vector< int > moves = game->getEmptySpaces();
@@ -78,8 +78,8 @@ int Player::TakeTurn( TTT *game ){
   return game->checkWinner();
 
 }
+*/
 
-/*
 int Player::TakeTurn( TTT *game ){
   const int numOfInputs = 9;
 
@@ -97,9 +97,10 @@ int Player::TakeTurn( TTT *game ){
   }
 
   for( unsigned int i=0; i<sorted.size(); i++ ){
-
     potentialMove = indexOf( moves, sorted[i] );
+    //cout << "sorted: " << i << " " << potentialMove << " " << sorted[i] << endl;
     if(!game->move( potentialMove/3, potentialMove%3, mark )){
+      //cout << "--moved to: " << potentialMove << endl;
       return game->checkWinner();
     }
   }
@@ -107,7 +108,7 @@ int Player::TakeTurn( TTT *game ){
   return 0;
 
 }
-*/
+
 
 
 inline int Player::indexOf( vector<float>& v, float element ) {

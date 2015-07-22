@@ -70,11 +70,33 @@ void GA::SortPopulation(){
   sort( sortedFitness.begin(), sortedFitness.end(), greater<double>() );
 
   vector< int > pos;
+  cout << "Top player IDs:" << endl;
   for( int i=0; i<NUMOFPLAYERS; i++){
     pos = indexOf(fitness, sortedFitness[i]);
     //cout << pos.size() << endl;
-    newPopulation[i] = population[ pos[0] ];
+    //newPopulation[i] = population[ pos[0] ];
 
+    
+    for( unsigned int j=0; j<pos.size(); j++ ){ 
+      if( i >= NUMOFPLAYERS ) {
+        //cout << "*************BREAKING*************" << endl;
+        break;
+      }
+      newPopulation[i] = population[ pos[j] ];
+      //cout << "inner loop: " << i << " " << pos[j] << endl;
+      //cout << "id: " << population[ pos[j] ].Id << endl << endl;;
+      i++;
+      /*
+      if( i < 10 ){
+        cout << i << " " << pos[j] << endl;;
+      }
+      i++;*/
+    }
+    i--;
+    //cout << "\n\n" << endl;
+
+    //newPopulation[i] = population[ pos[0] ];
+   
     /*
     for( unsigned int j=0; j<pos.size(); j++ ){
       cout << "pos[j]: " <<pos[j] << endl;
@@ -87,18 +109,22 @@ void GA::SortPopulation(){
     }
     */
   }
-
   //reverse( newPopulation.begin(), newPopulation.end() );
 
   cout << "Max Fitness: " << newPopulation[0].Id << " " <<newPopulation[0].Fitness()/(float)TESTINGPOOLSIZE << endl;
   cout << "Average Fitness: " << averageFitness << endl << endl;
   //cout << newPopulation[0].wins << " " << newPopulation[0].ties << " " << newPopulation[0].losses << endl;
   //cout << NUMOFPLAYERS-1 << " " << newPopulation[NUMOFPLAYERS-1].Fitness() << endl;
-  /*
-  for( int i=0; i<NUMOFPLAYERS; i++){
+  
+  for( int i=0; i<10; i++){
     cout << i << " " << newPopulation[i].Id << endl;
   }
-  */
+  cout << "------------------------" << endl;
+  
+
+  
+
+
 }
 
 void GA::Breed(){
@@ -134,7 +160,11 @@ void GA::Breed(){
       //cout << "doing other brain" << endl;
       //newPopulation[j].brain.PertibateBrain();
       //cout << "done, doing new brain now" << endl;
+      //cout << "hhw: " << newP.brain.hhw[0][0][8] << endl;
+      //cout << "HHW: " << endl;
+      newP.brain.PrintHHW();
       newP.brain.PertibateBrain();
+      //cout << "punched brain" << endl;
       newP.Id = playerId++;
       //cout << "j: " << j << "\tid: " << newPopulation[j].Id << "\t" << newP.brain.ihw[0][0] << "\t" << newPopulation[j].brain.ihw[0][0] << endl;
       population[i] = newP;
@@ -228,16 +258,16 @@ void GA::RunSimulation(){
     cout << "\n\n\nbreeding\n\n\n" << endl;
     Breed();
 
-    if( averageFitness > threshold ){
-      threshold += 0.1;
+    if( averageFitness > 1.4 ){
       cout << "Population average is high enough to move on." << endl;
       break;
     }
-    if( averageFitness > 1.0 ){
+    if( averageFitness > threshold ){
+      threshold += 0.1;
       cout << "Generating new opponents to be crushed!!" << endl;
       for( int i=0; i<TESTINGPOOLSIZE; i++){
-	opponent[i] = Player(oppId++);
-	opponent[i].SetMark('o');
+        opponent[i] = Player(oppId++);
+        opponent[i].SetMark('o');
       }
     }
 
