@@ -30,6 +30,7 @@ public:
 
   void clearBoard();
   void getBoardLinear( float *outpt );
+  void getBoardLinearLong( float *outpt );
   int unitTest();
 
   vector< int > getEmptySpaces();

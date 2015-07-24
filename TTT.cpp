@@ -86,9 +86,32 @@ void TTT::getBoardLinear( float *outpt ){
   }
 }
 
+void TTT::getBoardLinearLong( float *outpt ){
+  //cout << "\n" << endl;
+  vector<float> line = vector<float>(2*N*M,0.0);
+  for( int i=0; i<N; i++){
+    for( int j=0; j<M; j++ ){
+      //line[i+j] = (float)board[i][j];
+      if( board[i][j] == -1){
+          *outpt = (float)board[i][j];
+          outpt++;
+
+          *outpt = 0.0;
+          outpt++;
+      } else {
+        *outpt = 0.0;
+        outpt++;
+
+        *outpt = (float)board[i][j];
+        outpt++;
+      }
+    }
+  }
+}
+
 vector< int > TTT::getEmptySpaces(){
   vector< int > empty = vector< int >();
-  
+
   for( int i=0; i<N; i++ ){
     for( int j=0; j<M; j++ ){
       if( board[i][j] == 0){

@@ -76,8 +76,8 @@ void GA::SortPopulation(){
     //cout << pos.size() << endl;
     //newPopulation[i] = population[ pos[0] ];
 
-    
-    for( unsigned int j=0; j<pos.size(); j++ ){ 
+
+    for( unsigned int j=0; j<pos.size(); j++ ){
       if( i >= NUMOFPLAYERS ) {
         //cout << "*************BREAKING*************" << endl;
         break;
@@ -96,7 +96,7 @@ void GA::SortPopulation(){
     //cout << "\n\n" << endl;
 
     //newPopulation[i] = population[ pos[0] ];
-   
+
     /*
     for( unsigned int j=0; j<pos.size(); j++ ){
       cout << "pos[j]: " <<pos[j] << endl;
@@ -115,14 +115,14 @@ void GA::SortPopulation(){
   cout << "Average Fitness: " << averageFitness << endl << endl;
   //cout << newPopulation[0].wins << " " << newPopulation[0].ties << " " << newPopulation[0].losses << endl;
   //cout << NUMOFPLAYERS-1 << " " << newPopulation[NUMOFPLAYERS-1].Fitness() << endl;
-  
+
   for( int i=0; i<10; i++){
     cout << i << " " << newPopulation[i].Id << endl;
   }
   cout << "------------------------" << endl;
-  
 
-  
+
+
 
 
 }
@@ -492,6 +492,7 @@ void GA::PlayGame(Player *p1, Player *p2, TTT *game, int playerNum){
           break;
         }
       }
+      //game->printBoard();
   }
   //cout << float( clock () - t0 ) /  CLOCKS_PER_SEC << endl;
   //game.clearBoard();

@@ -9,7 +9,7 @@ using namespace std;
 Player::Player(){
 }
 Player::Player(int id){
-  brain.Init(9,9,9,9);
+  brain.Init(18,18,9,1);
 
   wins = 0.0;
   ties = 0.0;
@@ -52,7 +52,7 @@ int Player::TakeTurn( TTT *game, mutex *m ){
   return ret;
 }
 
-/*
+
 int Player::TakeTurn( TTT *game ){
 
   vector< int > moves = game->getEmptySpaces();
@@ -60,26 +60,32 @@ int Player::TakeTurn( TTT *game ){
   int bestMove;
   float bestRank = -9999.9;
   float currentRank;
-  float board[9];
-
+  float board[18];
+  //cout << "taking turn" << endl;
   for( unsigned int i=0; i<moves.size(); i++ ){
-    game->getBoardLinear( &board[0] );
-    board[ moves[i] ] = game->getMarkValue(mark);
+    //cout << "i: " << i << endl;
+    game->getBoardLinearLong( &board[0] );
+    //cout << "got board" << endl;
+    board[ 2*moves[i] ] = game->getMarkValue(mark);
+    //cout << "moves: " << moves[i] << endl;
     currentRank = brain.run( &board[0] )[0];
-    //cout << "rank: " << currentRank << " move: " << moves[i] << endl; 
+    //board[ moves[i] ] = 0;
+    //cout << "currentRank: " << currentRank << endl;
+    //cout << "rank: " << currentRank << " move: " << moves[i] << endl;
     if( currentRank > bestRank ){
       bestRank = currentRank;
       bestMove = moves[i];
     }
   }
   //cout << "\n\n";
-  
+
   game->move( bestMove/3, bestMove%3, mark );
+  //cout << "move complete. moved to the " << bestMove << "th place" << endl;
   return game->checkWinner();
 
 }
-*/
 
+/*
 int Player::TakeTurn( TTT *game ){
   const int numOfInputs = 9;
 
@@ -108,7 +114,7 @@ int Player::TakeTurn( TTT *game ){
   return 0;
 
 }
-
+*/
 
 
 inline int Player::indexOf( vector<float>& v, float element ) {

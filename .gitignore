@@ -1,0 +1,7 @@
+*~
+GA.o
+Player.o
+TTT.o
+NeuralNetwork.o
+GA
+brains/nn*.dat
