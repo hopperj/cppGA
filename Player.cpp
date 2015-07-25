@@ -9,7 +9,7 @@ using namespace std;
 Player::Player(){
 }
 Player::Player(int id){
-  brain.Init(18,18,9,1);
+  brain.Init(18,18,9,9);
 
   wins = 0.0;
   ties = 0.0;
