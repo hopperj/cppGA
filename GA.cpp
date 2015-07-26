@@ -162,7 +162,7 @@ void GA::Breed(){
       //cout << "done, doing new brain now" << endl;
       //cout << "hhw: " << newP.brain.hhw[0][0][8] << endl;
       //cout << "HHW: " << endl;
-      newP.brain.PrintHHW();
+      //newP.brain.PrintHHW();
       newP.brain.PertibateBrain();
       //cout << "punched brain" << endl;
       newP.Id = playerId++;
@@ -210,8 +210,8 @@ void GA::RunSimulation(){
     opponent[i] = Player(oppId++);
     opponent[i].SetMark('o');
   }
+
   cout << "Created opponents" << endl;
-  // thread_ = thread( &clientTCP::run , this, f );
   vector< thread > threads = vector< thread >(numOfThreads);
   int start,end;
 
@@ -228,11 +228,6 @@ void GA::RunSimulation(){
       if( end > NUMOFPLAYERS){
         end = NUMOFPLAYERS;
       }
-
-      //outputMutex.lock();
-      //cout << "-->start: " << start << "\tend:" << end << endl;
-      //outputMutex.unlock();
-      //threads[i] = thread( &GA::PlayTournament, this, start, end, opponent );
       threads[i] = thread( &GA::PlayTournament, this, start, end, opponent );
     }
 
@@ -422,7 +417,7 @@ void GA::PlayHumanGame(Player *p1){
         cout << "\n\n\n";
         game.printBoard();
         if( turnNum % 2 == 0){
-          if( p1->TakeTurn( &game ) ){
+          if( p1->TakeTurnRanking( &game ) ){
             cout << "-->P1 wins" << endl;
             wasWinner = true;
             break;
@@ -465,7 +460,7 @@ void GA::PlayGame(Player *p1, Player *p2, TTT *game, int playerNum){
   bool wasWinner;
 
   p1->SetMark('x');
-  //p2->SetMark('o');
+  p2->SetMark('o');
 
   wasWinner = false;
   //cout << "Player " << p1->Id << " vs " << p2->Id << endl;
@@ -473,7 +468,7 @@ void GA::PlayGame(Player *p1, Player *p2, TTT *game, int playerNum){
       //cout << "turnNum: " << turnNum << " " << endl;
       if( turnNum % 2 == 0){
         //cout << "P1" << endl;
-        if( p1->TakeTurn( game ) ){
+        if( p1->TakeTurnRanking( game ) ){
           //cout << "p1 wins" << endl;
           //p1->wins += 1.0;
           p1->wins += 1.50 - (float)(turnNum-4)/4.0;
@@ -483,7 +478,7 @@ void GA::PlayGame(Player *p1, Player *p2, TTT *game, int playerNum){
         }
       } else {
         //cout << "P2" << endl;
-        if( p2->TakeTurn( game, &m[playerNum] ) ){
+        if( p2->TakeTurnRanking( game ) ){
           //cout << "-->p2 wins" << endl;
           //p2->wins += 1.0;
           p1-> wins -= 2.50 - (float)(turnNum-4)/4.0;

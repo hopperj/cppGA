@@ -16,12 +16,12 @@ using namespace std;
 
 
 void NeuralNetwork::Init( int ins, int hidd, int nohl, int outs ){
-  
+
   NUMOFINPUTS = ins+1;
   NUMOFHIDDEN = hidd+1;
   NUMOFHIDDENLAYERS = nohl;
   NUMOFOUTPUTS = outs;
-  
+
   energyThreshold = 0.9;
   useThreshold = 0;
 
@@ -77,7 +77,7 @@ int NeuralNetwork::load(int gen, int id){
       RandomIHW();
       RandomHHW();
       RandomHOW();
-    
+
       for( int i=0; i<NUMOFINPUTS; i++) {
         for( int j=0; j<NUMOFHIDDEN; j++) {
           fin >> ihw[i][j];

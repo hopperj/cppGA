@@ -115,7 +115,7 @@ vector< int > TTT::getEmptySpaces(){
   for( int i=0; i<N; i++ ){
     for( int j=0; j<M; j++ ){
       if( board[i][j] == 0){
-	empty.push_back(3*i+j);
+	       empty.push_back(3*i+j);
       }
     }
   }

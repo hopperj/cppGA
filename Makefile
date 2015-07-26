@@ -1,8 +1,10 @@
 
 
 CC=g++
-CFLAGS=-c -Wall -std=c++11 -O3 -L /usr/lib -I /usr/include -pthread -march=native -flto -fwhole-program -ffast-math# -Ofast
-LDFLAGS=-L /usr/lib -I /usr/include  -O3 -pthread -march=native -flto -fwhole-program -ffast-math
+CFLAGS=-c -Wall -O3 -L /usr/lib -I /usr/include -march=native -flto -Ofast -ffast-math -fwhole-program -pthread -std=c++11
+#
+LDFLAGS=-L /usr/lib -I /usr/include -march=native -Ofast -ffast-math -fwhole-program -pthread -std=c++11
+# -flto 
 SOURCES=NeuralNetwork.cpp TTT.cpp GA.cpp Player.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
 EXECUTABLE=GA

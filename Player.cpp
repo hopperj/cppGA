@@ -9,7 +9,7 @@ using namespace std;
 Player::Player(){
 }
 Player::Player(int id){
-  brain.Init(18,18,9,9);
+  brain.Init(18,18,18,1);
 
   wins = 0.0;
   ties = 0.0;
@@ -45,19 +45,12 @@ float Player::MaxFitness(){
   return 1.0;
   return 5.0;
 }
-int Player::TakeTurn( TTT *game, mutex *m ){
-  //m->lock();
-  int ret = TakeTurn( game );
-  //m->unlock();
-  return ret;
-}
 
-
-int Player::TakeTurn( TTT *game ){
+int Player::TakeTurnRanking( TTT *game ){
 
   vector< int > moves = game->getEmptySpaces();
 
-  int bestMove;
+  int bestMove=-1;
   float bestRank = -9999.9;
   float currentRank;
   float board[18];
@@ -66,7 +59,17 @@ int Player::TakeTurn( TTT *game ){
     //cout << "i: " << i << endl;
     game->getBoardLinearLong( &board[0] );
     //cout << "got board" << endl;
-    board[ 2*moves[i] ] = game->getMarkValue(mark);
+    if( mark=='x'){
+      board[ 2*moves[i] ] = game->getMarkValue(mark);
+    } else {
+      board[ 2*moves[i]+1 ] = game->getMarkValue(mark);
+    }
+    /*
+    for( int i=0; i<18; i++ ){
+      cout << board[i] << " ";
+    }
+    cout << endl;
+    */
     //cout << "moves: " << moves[i] << endl;
     currentRank = brain.run( &board[0] )[0];
     //board[ moves[i] ] = 0;
@@ -77,10 +80,10 @@ int Player::TakeTurn( TTT *game ){
       bestMove = moves[i];
     }
   }
-  //cout << "\n\n";
 
   game->move( bestMove/3, bestMove%3, mark );
   //cout << "move complete. moved to the " << bestMove << "th place" << endl;
+  //cout << "\n\n";
   return game->checkWinner();
 
 }

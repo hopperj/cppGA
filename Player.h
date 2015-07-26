@@ -34,7 +34,7 @@ public:
   Player(int id);
 
   int TakeTurn( TTT *game );
-  int TakeTurn( TTT *game, mutex *m );
+  int TakeTurnRanking( TTT *game );
   inline int indexOf( vector<float>& v, float element );
   void SetMark( char _mark );
   float Fitness();
