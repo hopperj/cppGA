@@ -12,6 +12,7 @@ using namespace std;
 
 class NeuralNetwork
 {
+
 public:
 
 
@@ -32,8 +33,8 @@ public:
 
   int useThreshold;
   float energyThreshold;
-  float mutationChance = 0.05;
-  float mutationStrength = 0.05;
+  float mutationChance = 0.01;
+  float mutationStrength = 0.1;
 
   void Init( int ins, int hidd, int nohl, int outs );
 

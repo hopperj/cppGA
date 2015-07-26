@@ -127,6 +127,64 @@ void GA::SortPopulation(){
 
 }
 
+Player GA::Mate( Player p1, Player p2){
+  Player newP = Player(playerId++);
+
+
+  for( int i=0; i<p1.brain.NUMOFINPUTS; i++ ){
+    for( int h=0; h<p1.brain.NUMOFHIDDEN; h++ ){
+      if( rand()/float(RAND_MAX) >= p1.brain.mutationChance ){
+        newP.brain.ihw[i][h] += p1.brain.mutationStrength*(rand()/float(RAND_MAX) - 0.5);
+      }
+      else{
+        if( rand()/float(RAND_MAX) >= 0.5 ){
+          newP.brain.ihw[i][h] = p1.brain.ihw[i][h];
+        } else {
+          newP.brain.ihw[i][h] = p2.brain.ihw[i][h];
+        }
+      }
+
+    }
+  }
+
+  for( int hl=0; hl<p1.brain.NUMOFHIDDENLAYERS; hl++){
+    for( int h1=0; h1<p1.brain.NUMOFHIDDEN; h1++){
+      //cout << " **" << hl << " " << h1 << " " << hhw[hl][h1][0] << endl;
+      for( int h2=0; h2<p1.brain.NUMOFHIDDEN; h2++){
+        if( rand()/float(RAND_MAX) >= p1.brain.mutationChance ){
+          newP.brain.hhw[hl][h1][h2] += p1.brain.mutationStrength*(rand()/float(RAND_MAX) - 0.5);
+        }
+        else{
+          if( rand()/float(RAND_MAX) >= 0.5 ){
+            newP.brain.hhw[hl][h1][h2] = p1.brain.hhw[hl][h1][h2];
+          } else {
+            newP.brain.hhw[hl][h1][h2] = p2.brain.hhw[hl][h1][h2];
+          }
+        }
+      }
+    }
+  }
+
+  for( int h=0; h<p1.brain.NUMOFHIDDEN; h++ ){
+    for( int o=0; o<p1.brain.NUMOFOUTPUTS; o++ ){
+      if( rand()/float(RAND_MAX) >= p1.brain.mutationChance ){
+        newP.brain.how[h][o] += p1.brain.mutationStrength*(rand()/float(RAND_MAX) - 0.5);
+      }
+      else{
+        if( rand()/float(RAND_MAX) >= 0.5 ){
+          newP.brain.how[h][o] = p1.brain.how[h][o];
+        } else {
+          newP.brain.how[h][o] = p2.brain.how[h][o];
+        }
+      }
+    }
+  }
+
+  return newP;
+
+
+}
+
 void GA::Breed(){
 
   Player newP;
@@ -144,36 +202,45 @@ void GA::Breed(){
     population[i].ClearScore();
     i++;
   }
-  //cout << "Adding in randoms" << endl;
-  while( i<NUMOFPLAYERS*( 1.0 - killFraction )+0.05*NUMOFPLAYERS){
-    population[i] = Player(playerId++);
-    i++;
-  }
+
   //population[0].LoadBrain();
   //cout << "Doing breeding" << endl;
-  while( i < NUMOFPLAYERS ){
-    for( int j=0; j<=NUMOFPLAYERS*breedFraction; j++){
-      //cout << "-->" << i << " " << j << endl;
-      newP = newPopulation[j];
-      //cout << "changing ID " << playerId << endl;
-      newP.brain = newPopulation[j].brain;
-      //cout << "doing other brain" << endl;
-      //newPopulation[j].brain.PertibateBrain();
-      //cout << "done, doing new brain now" << endl;
-      //cout << "hhw: " << newP.brain.hhw[0][0][8] << endl;
-      //cout << "HHW: " << endl;
-      //newP.brain.PrintHHW();
-      newP.brain.PertibateBrain();
-      //cout << "punched brain" << endl;
-      newP.Id = playerId++;
-      //cout << "j: " << j << "\tid: " << newPopulation[j].Id << "\t" << newP.brain.ihw[0][0] << "\t" << newPopulation[j].brain.ihw[0][0] << endl;
-      population[i] = newP;
-      population[i].ClearScore();
-      i++;
-      if( i >= NUMOFPLAYERS ){
-        break;
+  while( i < NUMOFPLAYERS*.9 ){
+    for( int p=1; p<=NUMOFPLAYERS*breedFraction; p++){
+      for( int j=p-1; j>=0; j--){
+
+        newP = Mate( newPopulation[p], newPopulation[j]);
+        population[i] = newP;
+        /*
+        //cout << "-->" << i << " " << j << endl;
+        newP = newPopulation[j];
+        //cout << "changing ID " << playerId << endl;
+        newP.brain = newPopulation[j].brain;
+        //cout << "doing other brain" << endl;
+        //newPopulation[j].brain.PertibateBrain();
+        //cout << "done, doing new brain now" << endl;
+        //cout << "hhw: " << newP.brain.hhw[0][0][8] << endl;
+        //cout << "HHW: " << endl;
+        //newP.brain.PrintHHW();
+        newP.brain.PertibateBrain();
+        //cout << "punched brain" << endl;
+        newP.Id = playerId++;
+        //cout << "j: " << j << "\tid: " << newPopulation[j].Id << "\t" << newP.brain.ihw[0][0] << "\t" << newPopulation[j].brain.ihw[0][0] << endl;
+        population[i] = newP;
+        population[i].ClearScore();*/
+        i++;
+        if( i >= NUMOFPLAYERS ){
+          break;
+        }
       }
     }
+
+  }
+
+  //cout << "Adding in randoms" << endl;
+  while( i<NUMOFPLAYERS){
+    population[i] = Player(playerId++);
+    i++;
   }
 }
 

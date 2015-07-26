@@ -45,7 +45,7 @@ public:
   void PlayGame(Player *p1, Player *p2, TTT *game, int playerNum);
   void PlayHumanGame(Player *p1);
   void PlayTournament(int startNum, int endNum, vector< Player > opponent);
-
+  Player Mate( Player p1, Player p2);
   void PlayHumanTournament(Player *allStar);
 
   void Resume(int gen, int p);
