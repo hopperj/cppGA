@@ -196,7 +196,7 @@ void GA::Breed(){
     perfectScore = true;
   }
 
-  //cout << "Adding breeders" << endl;
+  cout << "Adding breeders" << endl;
   while( i<NUMOFPLAYERS*( 1.0 - killFraction ) ){
     population[i] = newPopulation[i];
     population[i].ClearScore();
@@ -204,14 +204,15 @@ void GA::Breed(){
   }
 
   //population[0].LoadBrain();
-  //cout << "Doing breeding" << endl;
+  cout << "Doing breeding" << endl;
   while( i < NUMOFPLAYERS*.9 ){
     for( int p=1; p<=NUMOFPLAYERS*breedFraction; p++){
       for( int j=p-1; j>=0; j--){
 
-        newP = Mate( newPopulation[p], newPopulation[j]);
-        population[i] = newP;
-        /*
+        //newP = Mate( newPopulation[p], newPopulation[j]);
+        //population[i] = newP;
+
+        
         //cout << "-->" << i << " " << j << endl;
         newP = newPopulation[j];
         //cout << "changing ID " << playerId << endl;
@@ -227,7 +228,7 @@ void GA::Breed(){
         newP.Id = playerId++;
         //cout << "j: " << j << "\tid: " << newPopulation[j].Id << "\t" << newP.brain.ihw[0][0] << "\t" << newPopulation[j].brain.ihw[0][0] << endl;
         population[i] = newP;
-        population[i].ClearScore();*/
+        population[i].ClearScore();
         i++;
         if( i >= NUMOFPLAYERS ){
           break;
@@ -592,5 +593,6 @@ int main(int argc, char* argv[]){
       }
     }
   }
+  cout << "All done with the simulation" << endl;
   return 1;
 }
