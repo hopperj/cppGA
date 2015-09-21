@@ -1,7 +1,7 @@
 
-#define NUMOFPLAYERS 1000
-#define TESTINGPOOLSIZE 100
-#define NUMOFGENERATIONS 150
+#define NUMOFPLAYERS 250
+#define TESTINGPOOLSIZE 25
+#define NUMOFGENERATIONS 100
 
 
 #include <stdio.h>
@@ -57,7 +57,7 @@ public:
   void GenPopulation();
 
 
-  float breedFraction = 0.15;
+  float breedFraction = 0.25;
   float killFraction = 0.25;
   bool perfectScore = false;
   float averageFitness;
